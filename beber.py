@@ -3,8 +3,11 @@ import os
 import openai
 import random
 import re
+import openai.error
 
 app = Flask(__name__)
+
+# Clé API OpenAI depuis les variables d'environnement (Render)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 recent_words = []
@@ -22,7 +25,11 @@ STYLES_PERSONNAGES = [
     "Merlin l'enchanteur, un brin farceur mais sage"
 ]
 
-MOTS_BANALS = {"nuage", "nuages", "chanter", "chantent", "danse", "dansent", "danser", "cosmique", "galaxie", "pluie", "ciel", "étoile", "jubile", "acrobat", "acrobatique", "tournoie", "fête", "musique", "camarade", "chant", "rythme"}
+MOTS_BANALS = {
+    "nuage", "nuages", "chanter", "chantent", "danse", "dansent", "danser",
+    "cosmique", "galaxie", "pluie", "ciel", "étoile", "jubile", "acrobat",
+    "acrobatique", "tournoie", "fête", "musique", "camarade", "chant", "rythme"
+}
 
 def nettoyer_texte(texte):
     mots = re.findall(r"\b\w+\b", texte.lower())
@@ -64,6 +71,9 @@ def get_answer(question):
         Réponds :
         """
 
+        print(f">>> Appel OpenAI : style = {style}, tonalité = {tonalite}")
+        print(f">>> Question : {question}")
+
         try:
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
@@ -76,11 +86,18 @@ def get_answer(question):
                 timeout=10
             )
             texte = response.choices[0].message['content'].strip()
+            print(f">>> Réponse brute : {texte}")
+
             if not filtrer_repetitions(texte):
                 return texte
-        except Exception as e:
+
+        except openai.error.OpenAIError as e:
             print(">>> ERREUR OpenAI :", e)
-            return "Béber s’est emmêlé les neurones (erreur OpenAI)."
+            return "Béber a buggué pendant sa vision (erreur OpenAI)."
+
+        except Exception as e:
+            print(">>> ERREUR inconnue :", e)
+            return "Béber est dans le cosmos, réponse impossible."
 
     return "Béber a buggé sur sa boule de cristal."
 
@@ -92,6 +109,10 @@ def oracle():
         if question:
             answer = get_answer(question)
     return render_template('index.html', answer=answer)
+
+@app.route('/ping')
+def ping():
+    return "pong"
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
