@@ -7,8 +7,10 @@ import openai.error
 
 app = Flask(__name__)
 
-# Clé API OpenAI depuis les variables d'environnement (Render)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
+
+# Active ou désactive le filtre à banalités
+DEBUG_MODE = True
 
 recent_words = []
 
@@ -88,8 +90,13 @@ def get_answer(question):
             texte = response.choices[0].message['content'].strip()
             print(f">>> Réponse brute : {texte}")
 
+            if DEBUG_MODE:
+                return texte
+
             if not filtrer_repetitions(texte):
                 return texte
+            else:
+                print(">>> Réponse filtrée.")
 
         except openai.error.OpenAIError as e:
             print(">>> ERREUR OpenAI :", e)
