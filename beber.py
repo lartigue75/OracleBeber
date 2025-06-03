@@ -1,16 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import openai
 import random
-import re
 import openai.error
 
 app = Flask(__name__)
+app.secret_key = 'béber-secret-session'
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
-
-# Mode debug : désactive le filtre à banalités
-DEBUG_MODE = True
 
 TONALITES = [
     "positive", "positive", "positive",
@@ -41,62 +38,59 @@ STYLES_PERSONNAGES = [
 ]
 
 def get_answer(question):
-    for _ in range(6):
-        tonalite = random.choice(TONALITES)
-        style_obj = random.choice(STYLES_PERSONNAGES)
-        nom = style_obj["nom"]
-        intro = style_obj["intro"]
+    tonalite = random.choice(TONALITES)
+    style_obj = random.choice(STYLES_PERSONNAGES)
+    nom = style_obj["nom"]
+    intro = style_obj["intro"]
 
-        prompt = f"""
-        Tu es un oracle inspiré par {nom}.
-        Tu réponds à la question suivante avec une tonalité {tonalite}.
-        - Sois bref (1 ou 2 phrases max)
-        - Pas de généralités ou banalités
-        - Adopte un ton marqué par ton personnage
-        - Évite les répétitions ou envolées lyriques
+    prompt = f"""
+    Tu es un oracle inspiré par {nom}.
+    Tu réponds à la question suivante avec une tonalité {tonalite}.
+    - Sois bref (1 ou 2 phrases max)
+    - Pas de généralités ou banalités
+    - Adopte un ton marqué par ton personnage
+    - Évite les répétitions ou envolées lyriques
 
-        Question : {question}
-        Réponds :
-        """
+    Question : {question}
+    Réponds :
+    """
 
-        print(f">>> OpenAI : {nom} / Tonalité : {tonalite}")
-        print(f">>> Question : {question}")
+    print(f">>> OpenAI : {nom} / Tonalité : {tonalite}")
+    print(f">>> Question : {question}")
 
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "Tu es un oracle incarné par un personnage fantasque ou mystique."},
-                    {"role": "user", "content": prompt.strip()}
-                ],
-                max_tokens=100,
-                temperature=1.2,
-                timeout=10
-            )
-            texte = response.choices[0].message['content'].strip()
-            print(f">>> Réponse : {texte}")
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Tu es un oracle incarné par un personnage fantasque ou mystique."},
+                {"role": "user", "content": prompt.strip()}
+            ],
+            max_tokens=100,
+            temperature=1.2,
+            timeout=10
+        )
+        texte = response.choices[0].message['content'].strip()
+        print(f">>> Réponse : {texte}")
 
-            # Affichage final
-            final_response = f"Pour te répondre, Béber convoque {nom}.\n{intro}\n« {texte} »"
-            return final_response
+        final_response = f"Pour te répondre, Béber convoque {nom}.\n{intro}\n« {texte} »"
+        return final_response
 
-        except openai.error.OpenAIError as e:
-            print(">>> ERREUR OpenAI :", e)
-            return "Béber a buggué pendant sa vision (erreur OpenAI)."
-
-        except Exception as e:
-            print(">>> ERREUR inconnue :", e)
-            return "Béber est dans le cosmos, réponse impossible."
-
-    return "Béber a buggé sur sa boule de cristal."
+    except openai.error.OpenAIError as e:
+        print(">>> ERREUR OpenAI :", e)
+        return "Béber a buggué pendant sa vision (erreur OpenAI)."
+    except Exception as e:
+        print(">>> ERREUR inconnue :", e)
+        return "Béber est dans le cosmos, réponse impossible."
 
 @app.route('/', methods=['GET', 'POST'])
 def oracle():
-    answer = None
     if request.method == 'POST':
         question = request.form.get("question", "").strip()
         if question:
-            answer = get_answer(question)
+            session['answer'] = get_answer(question)
+        return redirect(url_for('oracle'))
+
+    answer = session.pop('answer', None)
     return render_template('index.html', answer=answer)
 
 @app.route('/ping')

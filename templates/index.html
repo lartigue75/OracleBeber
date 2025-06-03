@@ -21,6 +21,7 @@
             border: 2px dashed #d4a017;
             border-radius: 20px;
             margin-top: 20px;
+            max-width: 600px;
         }
         input[type="text"] {
             padding: 10px;
@@ -67,7 +68,7 @@
             </form>
         {% else %}
             <form method="post">
-                <input type="text" name="question" placeholder="Pose ta question à Béber l'Oracle">
+                <input type="text" name="question" placeholder="Pose ta question à Béber l'Oracle" required>
                 <br>
                 <button type="submit">Consulter l'oracle</button>
             </form>
