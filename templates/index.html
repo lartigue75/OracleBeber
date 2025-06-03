@@ -5,47 +5,70 @@
     <title>Oracle Béber</title>
     <style>
         body {
-            background-color: #fdf6e3;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: #fdf6e3 url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+            font-family: 'Georgia', serif;
             text-align: center;
-            padding-top: 50px;
+            padding: 50px 20px;
+            color: #3e2f1c;
         }
+
         img {
-            max-width: 300px;
-            margin-bottom: 30px;
+            max-width: 280px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
         }
+
         .boite {
-            background-color: #fff3cd;
+            background: #fff8dc;
             display: inline-block;
             padding: 30px;
-            border: 2px dashed #d4a017;
+            border: 2px dashed #b8860b;
             border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             margin-top: 20px;
+            max-width: 500px;
         }
+
         input[type="text"] {
-            padding: 10px;
-            width: 300px;
+            padding: 12px;
+            width: 80%;
             border-radius: 10px;
             border: 1px solid #ccc;
+            font-size: 16px;
         }
+
         button {
             margin-top: 15px;
-            padding: 10px 20px;
+            padding: 10px 25px;
             font-size: 16px;
-            background-color: #ffdd57;
+            background-color: #f4c542;
             border: none;
             border-radius: 10px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
+        button:hover {
+            background-color: #e0b432;
+        }
+
         .réponse {
             font-weight: bold;
             font-size: 22px;
             color: #5a2a00;
             margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
+
     <img src="{{ url_for('static', filename='beber.png') }}" alt="Béber l'oracle">
 
     <div class="boite">
@@ -58,5 +81,6 @@
             <button type="submit">Consulter l'oracle</button>
         </form>
     </div>
+
 </body>
 </html>
