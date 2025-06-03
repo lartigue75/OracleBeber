@@ -9,10 +9,8 @@ app = Flask(__name__)
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-# Active ou désactive le filtre à banalités
+# Mode debug : désactive le filtre à banalités
 DEBUG_MODE = True
-
-recent_words = []
 
 TONALITES = [
     "positive", "positive", "positive",
@@ -20,60 +18,48 @@ TONALITES = [
 ]
 
 STYLES_PERSONNAGES = [
-    "Le Chapelier Fou d'Alice au pays des merveilles",
-    "Le Chat de Cheshire, mystérieux et ironique",
-    "La Reine de Cœur, autoritaire et excessive",
-    "La Pythie de Delphes, en transe prophétique",
-    "Merlin l'enchanteur, un brin farceur mais sage"
+    {
+        "nom": "Le Chapelier Fou",
+        "intro": "Le Chapelier Fou te répond avec un rictus tremblant :",
+    },
+    {
+        "nom": "Le Chat de Cheshire",
+        "intro": "Dans un sourire qui s'efface, le Chat de Cheshire te souffle :",
+    },
+    {
+        "nom": "La Reine de Cœur",
+        "intro": "La Reine de Cœur crie depuis son trône instable :",
+    },
+    {
+        "nom": "La Pythie de Delphes",
+        "intro": "La Pythie, les yeux révulsés, murmure en transe :",
+    },
+    {
+        "nom": "Merlin l’Enchanteur",
+        "intro": "Merlin l’Enchanteur, à moitié endormi, marmonne :",
+    }
 ]
-
-MOTS_BANALS = {
-    "nuage", "nuages", "chanter", "chantent", "danse", "dansent", "danser",
-    "cosmique", "galaxie", "pluie", "ciel", "étoile", "jubile", "acrobat",
-    "acrobatique", "tournoie", "fête", "musique", "camarade", "chant", "rythme"
-}
-
-def nettoyer_texte(texte):
-    mots = re.findall(r"\b\w+\b", texte.lower())
-    return set(mots)
-
-def racine_simplifiee(mot):
-    return re.sub(r'(es|s|x|nt|er|ent|ant|ique|iques)$', '', mot)
-
-def filtrer_repetitions(texte):
-    global recent_words
-    mots = nettoyer_texte(texte)
-    racines = {racine_simplifiee(mot) for mot in mots}
-
-    for mot in racines:
-        if mot in MOTS_BANALS:
-            return True
-        if any(mot in w or w in mot for w in recent_words):
-            return True
-
-    recent_words.extend(racines)
-    if len(recent_words) > 60:
-        recent_words = recent_words[-60:]
-    return False
 
 def get_answer(question):
     for _ in range(6):
         tonalite = random.choice(TONALITES)
-        style = random.choice(STYLES_PERSONNAGES)
+        style_obj = random.choice(STYLES_PERSONNAGES)
+        nom = style_obj["nom"]
+        intro = style_obj["intro"]
 
         prompt = f"""
-        Tu es un oracle inspiré par {style}.
+        Tu es un oracle inspiré par {nom}.
         Tu réponds à la question suivante avec une tonalité {tonalite}.
         - Sois bref (1 ou 2 phrases max)
         - Pas de généralités ou banalités
         - Adopte un ton marqué par ton personnage
-        - Évite les répétitions ou motifs trop lyriques
+        - Évite les répétitions ou envolées lyriques
 
         Question : {question}
         Réponds :
         """
 
-        print(f">>> Appel OpenAI : style = {style}, tonalité = {tonalite}")
+        print(f">>> OpenAI : {nom} / Tonalité : {tonalite}")
         print(f">>> Question : {question}")
 
         try:
@@ -88,15 +74,11 @@ def get_answer(question):
                 timeout=10
             )
             texte = response.choices[0].message['content'].strip()
-            print(f">>> Réponse brute : {texte}")
+            print(f">>> Réponse : {texte}")
 
-            if DEBUG_MODE:
-                return texte
-
-            if not filtrer_repetitions(texte):
-                return texte
-            else:
-                print(">>> Réponse filtrée.")
+            # Affichage final
+            final_response = f"Pour te répondre, Béber convoque {nom}.\n{intro}\n« {texte} »"
+            return final_response
 
         except openai.error.OpenAIError as e:
             print(">>> ERREUR OpenAI :", e)
