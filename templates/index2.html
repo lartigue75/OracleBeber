@@ -2,95 +2,82 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Oracle Béber et Léonie</title>
+    <title>Oracle Léonie</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #fdf6f0;
+            font-family: "Georgia", serif;
+            background-color: #fdfdfd;
             text-align: center;
-            padding: 2em;
+            padding: 50px;
         }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 1em;
-        }
-
-        .oracle-image {
-            width: 300px;
-            height: auto;
+        img {
+            max-width: 300px;
             border-radius: 15px;
-            box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 0 12px #aaa;
         }
-
-        .intro {
-            margin-top: 1em;
-            font-style: italic;
-            color: #444;
-            font-size: 1.2em;
+        h2 {
+            margin-top: 20px;
+            font-size: 26px;
+            color: #333;
         }
-
-        .reponse {
-            margin-top: 1em;
-            font-weight: bold;
-            color: #222;
-            font-size: 1.3em;
-        }
-
         form {
-            margin-top: 2em;
+            margin-top: 30px;
         }
-
         input[type="text"] {
+            padding: 12px;
             width: 60%;
-            padding: 0.7em;
-            font-size: 1em;
+            font-size: 16px;
+            border-radius: 8px;
             border: 1px solid #ccc;
-            border-radius: 8px;
         }
-
         button {
-            margin-top: 1em;
-            padding: 0.7em 1.5em;
-            font-size: 1em;
-            border-radius: 8px;
-            background-color: #373737;
+            margin-top: 15px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #444;
             color: white;
             border: none;
+            border-radius: 10px;
             cursor: pointer;
         }
-
-        .changer-voyant {
-            margin-top: 2em;
+        button:hover {
+            background-color: #666;
         }
-
+        .response {
+            margin-top: 40px;
+            font-size: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .intro {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .retour {
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
-    {% if voyant %}
-        <h1>{{ voyant|capitalize }} te répond</h1>
-        <img src="{{ url_for('static', filename=voyant + '.jpeg') }}" alt="oracle" class="oracle-image">
-        <div class="intro">{{ intro }}</div>
-        <div class="reponse">{{ reponse }}</div>
+    <img src="/static/leonie.jpeg" alt="Léonie la Voyante">
+    <h2>Léonie tente de voir</h2>
+    <form method="post">
+        <input type="text" name="question" placeholder="Pose ta question à Léonie" required>
+        <br>
+        <button type="submit">Obtenir une vision</button>
+    </form>
 
-        <form method="post">
-            <input type="hidden" name="voyant" value="{{ voyant }}">
-            <input type="text" name="question" placeholder="Pose ta question..." required>
-            <br>
-            <button type="submit">Demander à nouveau</button>
-        </form>
-
-        <div class="changer-voyant">
-            <form action="/" method="get">
-                <button>🔁 Changer de voyant</button>
-            </form>
+    {% if answer %}
+        <div class="response">
+            <p class="intro">{{ intro }}</p>
+            <p>{{ answer }}</p>
         </div>
-
-    {% else %}
-        <h1>Tu dois d'abord choisir un voyant</h1>
-        <form action="/" method="get">
-            <button>Retour à l'accueil</button>
-        </form>
     {% endif %}
+
+    <div class="retour">
+        <a href="/" class="oracle-button">🔁 Changer de voyant</a>
+    </div>
 </body>
 </html>

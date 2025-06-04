@@ -18,17 +18,7 @@ TONALITES = [
 # ROUTE D'ACCUEIL
 @app.route('/')
 def accueil():
-    return '''
-    <div style="text-align:center; padding-top:40px;">
-        <img src="/static/cabinet.jpeg" alt="Cabinet de voyance" style="max-width:400px; border-radius:20px; box-shadow:0 0 10px #aaa;">
-        <h2 style="font-family:Georgia, serif; margin-top:30px;">Le cabinet de voyance stochastique</h2>
-        <p style="font-size:18px;">Quel oracle souhaitez-vous consulter ?</p>
-        <div style="margin-top:20px;">
-            <a href="/beber" style="font-size:18px; margin-right:30px;">🧙‍♂️ Béber</a>
-            <a href="/leonie" style="font-size:18px;">🔮 Léonie</a>
-        </div>
-    </div>
-    '''
+    return render_template("accueil.html")
 
 # ORACLE BÉBER
 STYLES_PERSONNAGES = [

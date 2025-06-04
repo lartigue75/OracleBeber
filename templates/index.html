@@ -2,67 +2,82 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Le Cabinet de Voyance Stochastique</title>
+    <title>Oracle Béber</title>
     <style>
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f0ea;
+            font-family: "Georgia", serif;
+            background-color: #fdfdfd;
             text-align: center;
-            padding: 2em;
+            padding: 50px;
         }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 0.5em;
-        }
-
-        .subtext {
-            font-style: italic;
-            color: #555;
-            margin-bottom: 2em;
-        }
-
         img {
-            width: 300px;
-            border-radius: 12px;
-            margin-bottom: 2em;
-            box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 12px #aaa;
         }
-
-        .voyant-btn {
-            display: inline-block;
-            margin: 1em;
+        h2 {
+            margin-top: 20px;
+            font-size: 26px;
+            color: #333;
         }
-
+        form {
+            margin-top: 30px;
+        }
+        input[type="text"] {
+            padding: 12px;
+            width: 60%;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
         button {
-            padding: 1em 2em;
-            font-size: 1.1em;
-            border-radius: 10px;
-            background-color: #4a4a4a;
+            margin-top: 15px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #444;
             color: white;
             border: none;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-
         button:hover {
-            background-color: #6b6b6b;
+            background-color: #666;
+        }
+        .response {
+            margin-top: 40px;
+            font-size: 20px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .intro {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        .retour {
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-    <h1>Bienvenue au Cabinet de Voyance Stochastique</h1>
-    <div class="subtext">Choisis ton voyant pour une lecture inspirée par le hasard</div>
-    <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="Cabinet de voyance">
-    <div>
-        <form action="/voyance" method="post" class="voyant-btn">
-            <input type="hidden" name="voyant" value="beber">
-            <button>Béber 🔮</button>
-        </form>
-        <form action="/voyance" method="post" class="voyant-btn">
-            <input type="hidden" name="voyant" value="leonie">
-            <button>Léonie 🌙</button>
-        </form>
+    <img src="/static/beber.jpeg" alt="Béber le Voyant">
+    <h2>Béber te répond</h2>
+    <form method="post">
+        <input type="text" name="question" placeholder="Pose ta question à Béber" required>
+        <br>
+        <button type="submit">Obtenir une réponse</button>
+    </form>
+
+    {% if answer %}
+        <div class="response">
+            <p class="intro">{{ intro }}</p>
+            <p>{{ answer }}</p>
+        </div>
+    {% endif %}
+
+    <div class="retour">
+        <a href="/" class="oracle-button">🔁 Changer de voyant</a>
     </div>
 </body>
 </html>
