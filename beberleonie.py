@@ -41,12 +41,16 @@ def accueil():
 
     # Lire, incrémenter, et réécrire le compteur
     with open(compteur_path, 'r+') as f:
-        count = int(f.read())
+        content = f.read().strip()
+        try:
+            count = int(content)
+        except ValueError:
+            count = 0  # fallback si vide ou invalide
         count += 1
         f.seek(0)
         f.write(str(count))
         f.truncate()
-    
+
     return render_template("accueil.html", visites=count)
 
 # ORACLE BÉBER
