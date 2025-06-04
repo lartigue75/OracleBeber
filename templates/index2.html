@@ -2,32 +2,86 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Léonie répond</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Léonie l’Intuitive</title>
+    <style>
+        body {
+            background-color: #fefae0;
+            font-family: 'Georgia', serif;
+            text-align: center;
+            padding: 30px;
+        }
+        h1 {
+            color: #bb3e03;
+            margin-bottom: 10px;
+        }
+        form {
+            margin: 30px auto;
+            max-width: 500px;
+        }
+        input[type="text"] {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #bb3e03;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #ae2012;
+        }
+        .response-box {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #faedcd;
+            border-radius: 15px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 18px;
+        }
+        .image-container img {
+            width: 200px;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .home-link {
+            display: block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #283618;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Léonie</h1>
-        <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie" style="height: 200px;">
+    <h1>Léonie l’intuitive</h1>
 
-        <form method="POST">
-            <label for="question">Pose ta question :</label><br>
-            <textarea name="question" id="question" rows="3" required></textarea><br>
-            <button type="submit">Demander à Léonie</button>
-        </form>
-
-        {% if intro %}
-            <p><em>{{ intro }}</em></p>
-        {% endif %}
-
-        {% if answer %}
-            <div class="reponse">
-                <p><strong>{{ answer }}</strong></p>
-            </div>
-        {% endif %}
-
-        <br>
-        <a href="{{ url_for('accueil') }}">Changer d'oracle</a>
+    <div class="image-container">
+        <img src="{{ url_for('static', filename='leonie.jpg') }}" alt="Léonie">
     </div>
+
+    <form method="post">
+        <input type="text" name="question" placeholder="Pose ta question à Léonie..." required>
+        <input type="submit" value="Demander à Léonie">
+    </form>
+
+    {% if intro %}
+        <div class="response-box">
+            <p><strong>{{ intro }}</strong></p>
+            <p>{{ answer }}</p>
+        </div>
+    {% endif %}
+
+    <a class="home-link" href="{{ url_for('accueil') }}">⇦ Changer d’oracle</a>
 </body>
 </html>
