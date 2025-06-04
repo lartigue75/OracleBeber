@@ -45,6 +45,7 @@ def beber():
             - Pas de généralités ou banalités
             - Adopte un ton marqué par ton personnage : exagéré, mystérieux, absurde ou inquiétant
             - Évite les répétitions ou les formules creuses
+            - Ta collègue s'appelle Léonie
 
             Question : {question}
             Réponds :
@@ -96,7 +97,10 @@ def get_leonie_answer(question):
     Tu parles normalement, mais parfois tu reçois des images ou des symboles que tu traduis à ta façon.
     Tu n’es pas sûre de toi, mais tu dis ce qui te vient, sans chercher à convaincre.
     Ta réponse doit avoir une tonalité {tonalite}.
-
+    Réponse brève d'une ou deux phrases.
+    Garde une forme intuitive sans trop détailler.
+    Ton collègue s'appelle Béber.
+    
     Question : {question}
     Réponse :
     """
@@ -108,7 +112,7 @@ def get_leonie_answer(question):
                 {"role": "system", "content": "Tu es Léonie, une femme intuitive qui parle doucement, avec des visions floues qu'elle tente de comprendre."},
                 {"role": "user", "content": prompt.strip()}
             ],
-            max_tokens=100,
+            max_tokens=150,
             temperature=1.1,
         )
         return response.choices[0].message['content'].strip()
