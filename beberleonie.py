@@ -81,30 +81,31 @@ def get_answer_beber(question):
             return "Béber s’est emmêlé les neurones", f"(erreur OpenAI : {e})"
     return "Béber a buggé sur sa boule de cristal", "..."
 
-def get_answer_leonie(question):
+def get_leonie_answer(question):
     prompt = f"""
-    Tu es une femme intuitive nommée Léonie. Tu ressens des images symboliques et des impressions qui peuvent concerner le passé, le présent ou le futur.
-    Tu parles de façon naturelle, parfois avec hésitation, et tu exprimes les symboles qui te viennent en les traduisant comme tu peux.
-    Ne sois jamais catégorique. Tu n’es pas sûre, mais tu ressens.
-
+    Tu es une femme nommée Léonie, intuitive et sensible. Tu ne te prétends pas oracle.
+    Tu parles normalement, mais parfois tu reçois des images ou des symboles que tu traduis à ta façon.
+    Tu n’es pas sûre de toi, mais tu dis ce qui te vient, sans chercher à convaincre.
+    
     Question : {question}
-    Réponds :
+    Réponse :
     """
 
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Tu es une femme intuitive nommée Léonie. Tu réponds avec douceur, parfois des images surgissent. Tu n’es jamais totalement sûre de toi."},
+                {"role": "system", "content": "Tu es Léonie, une femme intuitive qui parle doucement, avec des visions floues qu'elle tente de comprendre."},
                 {"role": "user", "content": prompt.strip()}
             ],
-            max_tokens=120,
+            max_tokens=100,
             temperature=1.1,
         )
         texte = response.choices[0].message['content'].strip()
-        return "Léonie ferme les yeux, reste silencieuse... puis murmure :", texte
+        return texte
     except Exception as e:
-        return "Léonie s’est perdue dans ses pensées", f"(erreur OpenAI : {e})"
+        print(">>> ERREUR OpenAI (Léonie):", e)
+        return "Léonie ne parvient pas à voir clairement pour le moment."
 
 @app.route('/beber', methods=['GET', 'POST'])
 def beber():
@@ -123,12 +124,15 @@ def leonie():
     if request.method == 'POST':
         question = request.form.get("question", "").strip()
         if question:
-            session['intro'], session['answer'] = get_answer_leonie(question)
+            intro = "Léonie ferme les yeux… un symbole lui apparaît."
+            answer = get_leonie_answer(question)
+            session['answer'] = answer
+            session['intro'] = intro
         return redirect(url_for('leonie'))
 
-    intro = session.pop('intro', None)
     answer = session.pop('answer', None)
-    return render_template('leonie.html', intro=intro, answer=answer)
+    intro = session.pop('intro', None)
+    return render_template('index2.html', answer=answer, intro=intro)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
