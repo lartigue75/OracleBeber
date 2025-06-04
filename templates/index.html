@@ -21,7 +21,6 @@
             border: 2px dashed #d4a017;
             border-radius: 20px;
             margin-top: 20px;
-            max-width: 600px;
         }
         input[type="text"] {
             padding: 10px;
@@ -39,36 +38,29 @@
             cursor: pointer;
         }
         .intro {
-            font-size: 18px;
-            color: #6e4c1e;
+            font-style: italic;
+            color: #5c3b00;
             margin-bottom: 10px;
-            white-space: pre-line;
         }
-        .réponse {
+        .reponse {
             font-weight: bold;
             font-size: 22px;
-            color: #a61c00;
-            white-space: pre-line;
+            color: #5a2a00;
         }
     </style>
 </head>
 <body>
-    <img src="{{ url_for('static', filename='beber.png') }}" alt="Béber l'oracle">
-
+    <img src="{{ url_for('static', filename='beber.jpeg') }}" alt="Béber l'oracle">
     <div class="boite">
         {% if answer %}
-            <div class="intro">
-                {{ answer.split('«')[0]|safe }}
-            </div>
-            <div class="réponse">
-                «{{ answer.split('«')[1].rstrip('»') }}»
-            </div>
+            <div class="intro">{{ intro }}</div>
+            <div class="reponse">{{ answer }}</div>
             <form method="post">
                 <button type="submit" name="nouvelle_question">Une autre question ?</button>
             </form>
         {% else %}
             <form method="post">
-                <input type="text" name="question" placeholder="Pose ta question à Béber l'Oracle" required>
+                <input type="text" name="question" placeholder="Pose ta question à Béber l'Oracle">
                 <br>
                 <button type="submit">Consulter l'oracle</button>
             </form>
