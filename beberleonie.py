@@ -46,6 +46,7 @@ def beber():
             - Adopte un ton marqué par ton personnage : exagéré, mystérieux, absurde ou inquiétant
             - Évite les répétitions ou les formules creuses
             - Ta collègue s'appelle Léonie
+            - Tu ne sais pas si la personne qui pose la question est un homme ou une femme
 
             Question : {question}
             Réponds :
@@ -100,6 +101,7 @@ def get_leonie_answer(question):
     Réponse brève d'une ou deux phrases.
     Garde une forme intuitive sans trop détailler.
     Ton collègue s'appelle Béber.
+    Tu ne sais pas si la personnes qui pose la question est un homme ou une femme.
     
     Question : {question}
     Réponse :
