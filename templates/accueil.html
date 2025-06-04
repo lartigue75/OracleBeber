@@ -2,70 +2,72 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Oracle Béber & Léonie</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Le Cabinet Béber & Léonie</title>
     <style>
         body {
-            text-align: center;
             font-family: 'Georgia', serif;
-            background-color: #f2f2f2;
+            background-color: #f7f3e9;
+            text-align: center;
             padding: 30px;
         }
+
         h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
+            color: #6b2e2e;
+            font-size: 2.5em;
         }
-        p {
-            font-size: 1.5em;
-            margin-bottom: 40px;
+
+        .photo {
+            margin: 20px 0;
         }
-        .oracles {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-        }
-        .oracles a {
-            padding: 20px 40px;
-            font-size: 1.5em;
-            background-color: #333;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-        .oracles a:hover {
-            background-color: #555;
-        }
+
         img {
             max-width: 100%;
             height: auto;
-            margin-top: 40px;
-            border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .compteur {
-            margin-top: 20px;
+
+        .boutons {
+            margin: 30px 0;
+        }
+
+        .boutons a {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
             font-size: 1.2em;
-            color: #555;
+            color: white;
+            background-color: #6b2e2e;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .boutons a:hover {
+            background-color: #a94444;
+        }
+
+        .compteur {
+            margin-top: 40px;
             font-style: italic;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <h1>Bienvenue au Cabinet Béber & Léonie</h1>
-    <p>Choisis ton oracle pour une révélation unique</p>
+    <h1>Bienvenue dans le Cabinet Béber & Léonie</h1>
 
-    <div class="oracles">
-        <a href="{{ url_for('leonie') }}">Léonie</a>
-        <a href="{{ url_for('beber') }}">Béber</a>
+    <div class="photo">
+        <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="Photo du cabinet">
+    </div>
+
+    <div class="boutons">
+        <a href="{{ url_for('beber') }}">Consulter Béber</a>
+        <a href="{{ url_for('leonie') }}">Consulter Léonie</a>
     </div>
 
     <div class="compteur">
-        {{ compteur }} âmes ont consulté le cabinet
+        <p><strong>{{ visites }}</strong> âmes ont consulté le cabinet</p>
     </div>
-
-    <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="cabinet de voyance">
 </body>
 </html>

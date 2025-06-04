@@ -32,21 +32,22 @@ def incrementer_compteur():
     return compteur
 
 # ROUTE D'ACCUEIL
-def get_visite_count():
+@app.route('/')
+def accueil():
     compteur_path = 'compteur.txt'
     if not os.path.exists(compteur_path):
         with open(compteur_path, 'w') as f:
             f.write('0')
+
+    # Lire, incrémenter, et réécrire le compteur
     with open(compteur_path, 'r+') as f:
-        try:
-            count = int(f.read())
-        except ValueError:
-            count = 0
+        count = int(f.read())
         count += 1
         f.seek(0)
         f.write(str(count))
         f.truncate()
-    return count
+    
+    return render_template("accueil.html", visites=count)
 
 # ORACLE BÉBER
 STYLES_PERSONNAGES = [
