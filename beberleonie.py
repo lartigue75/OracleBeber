@@ -8,14 +8,25 @@ app.secret_key = 'béber-et-léonie'
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+# Tonalités communes
+TONALITES = [
+    "positive", "positive", "positive",
+    "négative", "négative",
+    "mitigée"
+]
+
 # ROUTE D'ACCUEIL
 @app.route('/')
 def accueil():
     return '''
-    <h2 style="text-align:center;">Bienvenue dans l'antre des visions</h2>
-    <div style="text-align:center; margin-top:20px;">
-        <a href="/beber" style="font-size:20px; margin-right:20px;">🧙‍♂️ Consulter Béber</a>
-        <a href="/leonie" style="font-size:20px;">🔮 Consulter Léonie</a>
+    <div style="text-align:center; padding-top:40px;">
+        <img src="/static/cabinet.jpeg" alt="Cabinet de voyance" style="max-width:400px; border-radius:20px; box-shadow:0 0 10px #aaa;">
+        <h2 style="font-family:Georgia, serif; margin-top:30px;">Le cabinet de voyance stochastique</h2>
+        <p style="font-size:18px;">Quel oracle souhaitez-vous consulter ?</p>
+        <div style="margin-top:20px;">
+            <a href="/beber" style="font-size:18px; margin-right:30px;">🧙‍♂️ Béber</a>
+            <a href="/leonie" style="font-size:18px;">🔮 Léonie</a>
+        </div>
     </div>
     '''
 
@@ -26,12 +37,6 @@ STYLES_PERSONNAGES = [
     "La Reine de Cœur, autoritaire et excessive",
     "La Pythie de Delphes, en transe prophétique",
     "Merlin l'enchanteur, un brin farceur mais sage"
-]
-
-TONALITES = [
-    "positive", "positive", "positive",
-    "négative", "négative",
-    "mitigée"
 ]
 
 @app.route('/beber', methods=['GET', 'POST'])
@@ -77,7 +82,6 @@ def beber():
     intro = session.pop('intro', None)
     return render_template('index.html', answer=answer, intro=intro)
 
-
 # ORACLE LÉONIE
 @app.route('/leonie', methods=['GET', 'POST'])
 def leonie():
@@ -95,10 +99,13 @@ def leonie():
     return render_template('index2.html', answer=answer, intro=intro)
 
 def get_leonie_answer(question):
+    tonalite = random.choice(TONALITES)
+
     prompt = f"""
     Tu es une femme nommée Léonie, intuitive et sensible. Tu ne te prétends pas oracle.
     Tu parles normalement, mais parfois tu reçois des images ou des symboles que tu traduis à ta façon.
     Tu n’es pas sûre de toi, mais tu dis ce qui te vient, sans chercher à convaincre.
+    Ta réponse doit avoir une tonalité {tonalite}.
 
     Question : {question}
     Réponse :
@@ -119,6 +126,5 @@ def get_leonie_answer(question):
         return "Léonie ne parvient pas à voir clairement pour le moment."
 
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
