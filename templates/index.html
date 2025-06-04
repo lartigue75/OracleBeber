@@ -2,45 +2,67 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Le cabinet de voyance stochastique</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Le Cabinet de Voyance Stochastique</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background: #f5f0ea;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f0ea;
             text-align: center;
-            padding-top: 50px;
+            padding: 2em;
         }
+
         h1 {
-            margin-bottom: 30px;
+            font-size: 2em;
+            margin-bottom: 0.5em;
         }
-        .button {
+
+        .subtext {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 2em;
+        }
+
+        img {
+            width: 300px;
+            border-radius: 12px;
+            margin-bottom: 2em;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+        }
+
+        .voyant-btn {
             display: inline-block;
-            margin: 20px;
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #222;
+            margin: 1em;
+        }
+
+        button {
+            padding: 1em 2em;
+            font-size: 1.1em;
+            border-radius: 10px;
+            background-color: #4a4a4a;
             color: white;
             border: none;
-            border-radius: 8px;
-            text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
-        .button:hover {
-            background-color: #555;
-        }
-        img {
-            max-width: 500px;
-            width: 100%;
-            border-radius: 12px;
+
+        button:hover {
+            background-color: #6b6b6b;
         }
     </style>
 </head>
 <body>
-    <h1>Bienvenue dans le cabinet de voyance stochastique</h1>
-    <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="Le cabinet de voyance"><br>
-    <a href="/voyance?voyant=beber" class="button">Consulter Béber</a>
-    <a href="/voyance?voyant=leonie" class="button">Consulter Léonie</a>
+    <h1>Bienvenue au Cabinet de Voyance Stochastique</h1>
+    <div class="subtext">Choisis ton voyant pour une lecture inspirée par le hasard</div>
+    <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="Cabinet de voyance">
+    <div>
+        <form action="/voyance" method="post" class="voyant-btn">
+            <input type="hidden" name="voyant" value="beber">
+            <button>Béber 🔮</button>
+        </form>
+        <form action="/voyance" method="post" class="voyant-btn">
+            <input type="hidden" name="voyant" value="leonie">
+            <button>Léonie 🌙</button>
+        </form>
+    </div>
 </body>
 </html>
