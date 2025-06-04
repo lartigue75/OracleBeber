@@ -2,76 +2,84 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Léonie l’intuitive</title>
+    <title>Réponse de l'oracle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #f5f7fa;
-            font-family: 'Georgia', serif;
+            font-family: 'Roboto', sans-serif;
+            background-color: #fdf7f2;
+            color: #333;
             text-align: center;
-            padding-top: 50px;
-            color: #2e2e2e;
+            padding: 40px;
         }
-        img {
+        .voyant-img {
             max-width: 300px;
-            margin-bottom: 30px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .boite {
-            background-color: #ffffff;
-            display: inline-block;
-            padding: 30px;
-            border: 2px solid #a2b3c7;
-            border-radius: 20px;
-            margin-top: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
-        }
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-family: 'Georgia', serif;
-        }
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #cbd8e6;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: 'Georgia', serif;
+            width: 100%;
+            border-radius: 15px;
+            margin: 20px auto;
         }
         .intro {
             font-style: italic;
-            color: #5c6b7a;
-            margin-bottom: 10px;
-            font-size: 18px;
+            color: #555;
+            margin-top: 20px;
+            font-size: 20px;
         }
         .reponse {
             font-weight: bold;
-            font-size: 22px;
-            color: #3b3b3b;
+            font-size: 24px;
+            color: #222;
+            margin: 30px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 14px 28px;
+            font-size: 16px;
+            background-color: #222;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #444;
+        }
+        form {
+            margin-top: 30px;
+        }
+        input[type="text"] {
+            width: 80%;
+            max-width: 500px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-    <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie la voyante">
-    <div class="boite">
-        {% if answer %}
-            <div class="intro">{{ intro }}</div>
-            <div class="reponse">{{ answer }}</div>
-            <form method="post">
-                <button type="submit" name="nouvelle_question">Une autre vision ?</button>
-            </form>
-        {% else %}
-            <form method="post">
-                <input type="text" name="question" placeholder="Pose ta question à Léonie">
-                <br>
-                <button type="submit">Interroger Léonie</button>
-            </form>
-        {% endif %}
-    </div>
+
+    {% if voyant %}
+        <img src="{{ url_for('static', filename=voyant + '.jpeg') }}" class="voyant-img" alt="voyant">
+        <div class="intro">{{ intro }}</div>
+        <div class="reponse">{{ reponse }}</div>
+
+        <form method="post">
+            <input type="hidden" name="voyant" value="{{ voyant }}">
+            <input type="text" name="question" placeholder="Pose ta prochaine question ici...">
+            <input type="submit" class="button" value="Demander à nouveau">
+        </form>
+
+        <br><br>
+        <a href="/" class="button">Changer de voyant</a>
+    {% else %}
+        <p>Tu dois d’abord choisir un voyant.</p>
+        <a href="/" class="button">Retour à l’accueil</a>
+    {% endif %}
+
 </body>
 </html>

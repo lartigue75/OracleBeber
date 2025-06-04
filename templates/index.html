@@ -2,69 +2,45 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Oracle Béber</title>
+    <title>Le cabinet de voyance stochastique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #fdf6e3;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Roboto', sans-serif;
+            background: #f5f0ea;
             text-align: center;
             padding-top: 50px;
         }
-        img {
-            max-width: 300px;
+        h1 {
             margin-bottom: 30px;
         }
-        .boite {
-            background-color: #fff3cd;
+        .button {
             display: inline-block;
-            padding: 30px;
-            border: 2px dashed #d4a017;
-            border-radius: 20px;
-            margin-top: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #ffdd57;
+            margin: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #222;
+            color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
+            text-decoration: none;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
-        .intro {
-            font-style: italic;
-            color: #5c3b00;
-            margin-bottom: 10px;
+        .button:hover {
+            background-color: #555;
         }
-        .reponse {
-            font-weight: bold;
-            font-size: 22px;
-            color: #5a2a00;
+        img {
+            max-width: 500px;
+            width: 100%;
+            border-radius: 12px;
         }
     </style>
 </head>
 <body>
-    <img src="{{ url_for('static', filename='beber.jpeg') }}" alt="Béber l'oracle">
-    <div class="boite">
-        {% if answer %}
-            <div class="intro">{{ intro }}</div>
-            <div class="reponse">{{ answer }}</div>
-            <form method="post">
-                <button type="submit" name="nouvelle_question">Une autre question ?</button>
-            </form>
-        {% else %}
-            <form method="post">
-                <input type="text" name="question" placeholder="Pose ta question à Béber l'Oracle">
-                <br>
-                <button type="submit">Consulter l'oracle</button>
-            </form>
-        {% endif %}
-    </div>
+    <h1>Bienvenue dans le cabinet de voyance stochastique</h1>
+    <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="Le cabinet de voyance"><br>
+    <a href="/voyance?voyant=beber" class="button">Consulter Béber</a>
+    <a href="/voyance?voyant=leonie" class="button">Consulter Léonie</a>
 </body>
 </html>
