@@ -2,82 +2,72 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Oracle Léonie</title>
+    <title>Léonie vous écoute</title>
     <style>
         body {
-            font-family: "Georgia", serif;
-            background-color: #fdfdfd;
+            font-family: 'Georgia', serif;
+            background-color: #f9f5f0;
             text-align: center;
-            padding: 50px;
+            padding: 30px;
         }
-        img {
+        h1 {
+            color: #a93226;
+        }
+        .leonie-img {
             max-width: 300px;
-            border-radius: 15px;
-            box-shadow: 0 0 12px #aaa;
-        }
-        h2 {
-            margin-top: 20px;
-            font-size: 26px;
-            color: #333;
+            width: 80%;
+            height: auto;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
         form {
-            margin-top: 30px;
+            margin-top: 20px;
         }
         input[type="text"] {
-            padding: 12px;
+            padding: 10px;
             width: 60%;
-            font-size: 16px;
-            border-radius: 8px;
             border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
         button {
-            margin-top: 15px;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #444;
-            color: white;
+            padding: 10px 20px;
+            background-color: #f5b7b1;
             border: none;
-            border-radius: 10px;
+            border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
+            margin-left: 10px;
         }
         button:hover {
-            background-color: #666;
+            background-color: #ec7063;
         }
-        .response {
-            margin-top: 40px;
-            font-size: 20px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        .reponse {
+            margin-top: 30px;
+            font-style: italic;
+            color: #6e2c00;
         }
         .intro {
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-        .retour {
-            margin-top: 50px;
+            margin-top: 20px;
+            color: #884ea0;
         }
     </style>
 </head>
 <body>
-    <img src="/static/leonie.jpeg" alt="Léonie la Voyante">
-    <h2>Léonie tente de voir</h2>
+    <h1>Léonie vous écoute</h1>
+    <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie" class="leonie-img">
+
     <form method="post">
-        <input type="text" name="question" placeholder="Pose ta question à Léonie" required>
-        <br>
-        <button type="submit">Obtenir une vision</button>
+        <input type="text" name="question" placeholder="Posez votre question..." required>
+        <button type="submit">Demander à Léonie</button>
     </form>
 
-    {% if answer %}
-        <div class="response">
-            <p class="intro">{{ intro }}</p>
-            <p>{{ answer }}</p>
-        </div>
+    {% if intro %}
+    <div class="intro">{{ intro }}</div>
     {% endif %}
-
-    <div class="retour">
-        <a href="/" class="oracle-button">🔁 Changer de voyant</a>
-    </div>
+    {% if answer %}
+    <div class="reponse">{{ answer }}</div>
+    {% endif %}
 </body>
 </html>

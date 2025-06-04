@@ -2,72 +2,62 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Le Cabinet Béber & Léonie</title>
+    <title>Le cabinet Béber & Léonie</title>
     <style>
         body {
-            font-family: 'Georgia', serif;
-            background-color: #f7f3e9;
+            font-family: Georgia, serif;
+            background-color: #fdf6e3;
             text-align: center;
             padding: 30px;
         }
-
         h1 {
-            color: #6b2e2e;
+            color: #5b2c6f;
             font-size: 2.5em;
         }
-
-        .photo {
-            margin: 20px 0;
-        }
-
-        img {
-            max-width: 100%;
+        .image-cabinet {
+            max-width: 500px;
+            width: 80%;
             height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
         }
-
-        .boutons {
-            margin: 30px 0;
+        .liens {
+            margin-top: 30px;
         }
-
-        .boutons a {
+        .liens a {
             display: inline-block;
             margin: 10px;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            color: white;
-            background-color: #6b2e2e;
+            padding: 12px 25px;
+            background-color: #d7bde2;
+            color: #000;
             text-decoration: none;
             border-radius: 8px;
-            transition: background-color 0.3s;
+            font-weight: bold;
         }
-
-        .boutons a:hover {
-            background-color: #a94444;
+        .liens a:hover {
+            background-color: #bb8fce;
         }
-
         .compteur {
             margin-top: 40px;
             font-style: italic;
-            color: #555;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Bienvenue dans le Cabinet Béber & Léonie</h1>
+    <h1>Bienvenue chez Béber & Léonie</h1>
+    <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="cabinet" class="image-cabinet">
 
-    <div class="photo">
-        <img src="{{ url_for('static', filename='cabinet.jpeg') }}" alt="Photo du cabinet">
-    </div>
-
-    <div class="boutons">
+    <div class="liens">
         <a href="{{ url_for('beber') }}">Consulter Béber</a>
         <a href="{{ url_for('leonie') }}">Consulter Léonie</a>
     </div>
 
+    {% if visites %}
     <div class="compteur">
-        <p><strong>{{ visites }}</strong> âmes ont consulté le cabinet</p>
+        {{ visites }} âmes ont consulté le cabinet
     </div>
+    {% endif %}
 </body>
 </html>
