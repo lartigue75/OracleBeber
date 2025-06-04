@@ -2,72 +2,32 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Léonie vous écoute</title>
-    <style>
-        body {
-            font-family: 'Georgia', serif;
-            background-color: #f9f5f0;
-            text-align: center;
-            padding: 30px;
-        }
-        h1 {
-            color: #a93226;
-        }
-        .leonie-img {
-            max-width: 300px;
-            width: 80%;
-            height: auto;
-            border-radius: 12px;
-            margin: 20px 0;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-        }
-        form {
-            margin-top: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            width: 60%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #f5b7b1;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        button:hover {
-            background-color: #ec7063;
-        }
-        .reponse {
-            margin-top: 30px;
-            font-style: italic;
-            color: #6e2c00;
-        }
-        .intro {
-            margin-top: 20px;
-            color: #884ea0;
-        }
-    </style>
+    <title>Léonie répond</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Léonie vous écoute</h1>
-    <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie" class="leonie-img">
+    <div class="container">
+        <h1>Léonie</h1>
+        <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie" style="height: 200px;">
 
-    <form method="post">
-        <input type="text" name="question" placeholder="Posez votre question..." required>
-        <button type="submit">Demander à Léonie</button>
-    </form>
+        <form method="POST">
+            <label for="question">Pose ta question :</label><br>
+            <textarea name="question" id="question" rows="3" required></textarea><br>
+            <button type="submit">Demander à Léonie</button>
+        </form>
 
-    {% if intro %}
-    <div class="intro">{{ intro }}</div>
-    {% endif %}
-    {% if answer %}
-    <div class="reponse">{{ answer }}</div>
-    {% endif %}
+        {% if intro %}
+            <p><em>{{ intro }}</em></p>
+        {% endif %}
+
+        {% if answer %}
+            <div class="reponse">
+                <p><strong>{{ answer }}</strong></p>
+            </div>
+        {% endif %}
+
+        <br>
+        <a href="{{ url_for('accueil') }}">Changer d'oracle</a>
+    </div>
 </body>
 </html>
