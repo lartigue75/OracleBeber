@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Léonie l’intuitive</title>
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Georgia', serif;
+            text-align: center;
+            padding-top: 50px;
+            color: #2e2e2e;
+        }
+        img {
+            max-width: 300px;
+            margin-bottom: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .boite {
+            background-color: #ffffff;
+            display: inline-block;
+            padding: 30px;
+            border: 2px solid #a2b3c7;
+            border-radius: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-family: 'Georgia', serif;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #cbd8e6;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+        }
+        .intro {
+            font-style: italic;
+            color: #5c6b7a;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .reponse {
+            font-weight: bold;
+            font-size: 22px;
+            color: #3b3b3b;
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='leonie.png') }}" alt="Léonie la voyante">
+
+    <div class="boite">
+        {% if answer %}
+            <div class="intro">{{ intro }}</div>
+            <div class="reponse">{{ answer }}</div>
+            <form method="post">
+                <button type="submit" name="nouvelle_question">Une autre vision ?</button>
+            </form>
+        {% else %}
+            <form method="post">
+                <input type="text" name="question" placeholder="Pose ta question à Léonie">
+                <br>
+                <button type="submit">Interroger Léonie</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>
