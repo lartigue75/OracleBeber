@@ -15,10 +15,27 @@ TONALITES = [
     "mitigée"
 ]
 
+# Fichier compteur
+COMPTEUR_FILE = "compteur.txt"
+
+def lire_compteur():
+    try:
+        with open(COMPTEUR_FILE, 'r') as f:
+            return int(f.read().strip())
+    except:
+        return 0
+
+def incrementer_compteur():
+    compteur = lire_compteur() + 1
+    with open(COMPTEUR_FILE, 'w') as f:
+        f.write(str(compteur))
+    return compteur
+
 # ROUTE D'ACCUEIL
 @app.route('/')
 def accueil():
-    return render_template("accueil.html")
+    compteur = incrementer_compteur()
+    return render_template("accueil.html", compteur=compteur)
 
 # ORACLE BÉBER
 STYLES_PERSONNAGES = [
@@ -59,7 +76,7 @@ def beber():
                         {"role": "system", "content": "Tu es un oracle incarné par un personnage fantasque ou mystique. Tu réponds brièvement et avec un ton tranché."},
                         {"role": "user", "content": prompt.strip()}
                     ],
-                    max_tokens=100,
+                    max_tokens=150,
                     temperature=1.2,
                 )
                 texte = response.choices[0].message['content'].strip()

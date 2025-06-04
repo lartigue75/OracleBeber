@@ -2,56 +2,60 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Le cabinet de voyance stochastique</title>
+    <title>Oracle Béber & Léonie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: "Georgia", serif;
-            background-color: #f8f8f8;
+            font-family: 'Raleway', sans-serif;
+            background-color: #f6f6f6;
             text-align: center;
-            padding: 50px;
+            padding: 40px;
         }
-        img {
-            max-width: 400px;
-            border-radius: 20px;
-            box-shadow: 0 0 15px #aaa;
-        }
-        h2 {
-            margin-top: 30px;
-            font-size: 28px;
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
             color: #333;
         }
-        p {
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-        .button-container {
-            margin-top: 20px;
+        .oracle-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+            margin-bottom: 40px;
         }
         .oracle-button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 15px;
-            font-size: 20px;
+            padding: 20px 40px;
+            font-size: 1.4em;
             font-weight: bold;
-            background-color: #444;
             color: white;
+            background-color: #4e4eff;
             border: none;
             border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
             text-decoration: none;
-            transition: background-color 0.3s;
         }
         .oracle-button:hover {
-            background-color: #666;
+            transform: scale(1.05);
+            background-color: #2c2cff;
+        }
+        .counter {
+            font-size: 1em;
+            color: #777;
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-    <img src="/static/cabinet.jpeg" alt="Cabinet de voyance">
-    <h2>Le cabinet de voyance stochastique</h2>
-    <p>Quel oracle souhaites-tu consulter&nbsp;?</p>
-    <div class="button-container">
-        <a href="/beber" class="oracle-button">🧙‍♂️ Béber</a>
-        <a href="/leonie" class="oracle-button">🔮 Léonie</a>
+    <h1>Bienvenue dans le Cabinet de Béber & Léonie</h1>
+
+    <div class="oracle-buttons">
+        <a href="/beber" class="oracle-button">Consulter Béber</a>
+        <a href="/leonie" class="oracle-button">Consulter Léonie</a>
+    </div>
+
+    <div class="counter">
+        Nombre de visites du cabinet : <strong>{{ compteur }}</strong>
     </div>
 </body>
 </html>
