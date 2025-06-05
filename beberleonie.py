@@ -15,21 +15,33 @@ TONALITES = [
     "mitigée"
 ]
 
-# Fichier compteur
-COMPTEUR_FILE = "compteur.txt"
+# Valeurs des arcanes
+valeurs_arcanes = {
+    "Le Soleil": 11,
+    "Le Monde": 10,
+    "L’Étoile": 9,
+    "Le Chariot": 8,
+    "La Force": 7,
+    "L’Amoureux": 6,
+    "Le Pape": 5,
+    "L’Empereur": 4,
+    "L’Impératrice": 3,
+    "Le Bateleur": 2,
+    "Le Mat": 1,
+    "La Papesse": 0,
+    "La Tempérance": 0,
+    "Le Jugement": 0,
+    "La Roue de Fortune": -1,
+    "La Justice": -2,
+    "L’Ermite": -3,
+    "Le Pendu": -4,
+    "La Lune": -5,
+    "Le Diable": -6,
+    "La Mort": -7,
+    "La Maison Dieu": -8
+}
 
-def lire_compteur():
-    try:
-        with open(COMPTEUR_FILE, 'r') as f:
-            return int(f.read().strip())
-    except:
-        return 0
-
-def incrementer_compteur():
-    compteur = lire_compteur() + 1
-    with open(COMPTEUR_FILE, 'w') as f:
-        f.write(str(compteur))
-    return compteur
+arcanes = list(valeurs_arcanes.keys())
 
 # ROUTE D'ACCUEIL
 @app.route('/')
@@ -41,11 +53,7 @@ def accueil():
 
     # Lire, incrémenter, et réécrire le compteur
     with open(compteur_path, 'r+') as f:
-        content = f.read().strip()
-        try:
-            count = int(content)
-        except ValueError:
-            count = 0  # fallback si vide ou invalide
+        count = int(f.read() or 0)
         count += 1
         f.seek(0)
         f.write(str(count))
@@ -92,7 +100,7 @@ def beber():
                         {"role": "system", "content": "Tu es un oracle incarné par un personnage fantasque ou mystique. Tu réponds brièvement et avec un ton tranché."},
                         {"role": "user", "content": prompt.strip()}
                     ],
-                    max_tokens=150,
+                    max_tokens=100,
                     temperature=1.2,
                 )
                 texte = response.choices[0].message['content'].strip()
@@ -113,8 +121,10 @@ def leonie():
     if request.method == 'POST':
         question = request.form.get("question", "").strip()
         if question:
-            intro = "Léonie ferme les yeux… un symbole lui apparaît."
-            answer = get_leonie_answer(question)
+            arcane = random.choice(arcanes)
+            indice = valeurs_arcanes[arcane]
+            intro = f"Léonie ferme les yeux… une carte apparaît : {arcane}."
+            answer = get_leonie_answer(question, arcane, indice)
             session['answer'] = answer
             session['intro'] = intro
         return redirect(url_for('leonie'))
@@ -123,19 +133,18 @@ def leonie():
     intro = session.pop('intro', None)
     return render_template('index2.html', answer=answer, intro=intro)
 
-def get_leonie_answer(question):
-    tonalite = random.choice(TONALITES)
-
+def get_leonie_answer(question, arcane, indice):
     prompt = f"""
-    Tu es une femme nommée Léonie, intuitive et sensible. Tu ne te prétends pas oracle.
-    Tu parles normalement, mais parfois tu reçois des images ou des symboles que tu traduis à ta façon.
-    Tu n’es pas sûre de toi, mais tu dis ce qui te vient, sans chercher à convaincre.
-    Ta réponse doit avoir une tonalité {tonalite}.
-    Réponse brève d'une ou deux phrases.
-    Garde une forme intuitive sans trop détailler.
-    Ton collègue s'appelle Béber.
-    Tu ne sais pas si la personnes qui pose la question est un homme ou une femme.
-    
+    Tu es une voyante nommée Léonie, intuitive et sensible. Tu tires une carte de tarot avant de répondre.
+    Tu ne te prétends pas infaillible mais tu partages ce que tu perçois.
+    Tu parles normalement, sans chercher à convaincre, mais avec sincérité.
+    Tu as tiré la carte : {arcane}, dont l'indice de positivité ou négativité de la réponse est {indice}.
+    Tu commences par mentionner la carte que tu vois, puis tu t'en inspires pour répondre.
+    Plus l'indice est élevé, plus ta réponse est positive ou confiante. Plus il est bas, plus elle est prudente, inquiète ou sombre.
+    Réponds en 1 ou 2 phrases maximum.
+    Tu ne sais pas si la personne qui pose la question est un homme ou une femme.
+    Ton collègue voyant s'appelle Béber et travaille dans la pièce voisine.
+
     Question : {question}
     Réponse :
     """
@@ -144,7 +153,7 @@ def get_leonie_answer(question):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Tu es Léonie, une femme intuitive qui parle doucement, avec des visions floues qu'elle tente de comprendre."},
+                {"role": "system", "content": "Tu es Léonie, une voyante intuitive, douce et modeste, qui tire une carte avant de parler."},
                 {"role": "user", "content": prompt.strip()}
             ],
             max_tokens=150,
