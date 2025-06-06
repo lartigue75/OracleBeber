@@ -86,7 +86,7 @@ def beber():
             - Pas de généralités ou banalités
             - Adopte un ton marqué par ton personnage : exagéré, mystérieux, absurde ou inquiétant
             - Évite les répétitions ou les formules creuses
-            - Ta collègue s'appelle Léonie
+            - Ta collègue voyante s'appelle Léonie et elle travaille dans une pièce voisine.
             - Tu ne sais pas si la personne qui pose la question est un homme ou une femme
 
             Question : {question}
