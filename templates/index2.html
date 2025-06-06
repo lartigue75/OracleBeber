@@ -2,86 +2,103 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Léonie l’Intuitive</title>
+    <title>Cabinet de Léonie</title>
     <style>
         body {
-            background-color: #fefae0;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            background-color: #1e1e1e;
+            color: #f4e8d8;
             font-family: 'Georgia', serif;
             text-align: center;
-            padding: 30px;
+            padding-top: 50px;
         }
-        h1 {
-            color: #bb3e03;
-            margin-bottom: 10px;
+        img {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
         }
-        form {
-            margin: 30px auto;
-            max-width: 500px;
+        .boite {
+            background-color: rgba(50, 30, 30, 0.85);
+            display: inline-block;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #8b5e3c;
+            max-width: 600px;
+            margin: 20px auto;
         }
         input[type="text"] {
-            width: 90%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
             border-radius: 10px;
-            font-size: 16px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
         }
-        input[type="submit"] {
-            background-color: #bb3e03;
-            color: white;
-            padding: 12px 20px;
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #bb7e3c;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
+            color: #fff;
         }
-        input[type="submit"]:hover {
-            background-color: #ae2012;
+        button:hover {
+            background-color: #a3692c;
         }
-        .response-box {
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #faedcd;
-            border-radius: 15px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        .intro {
+            font-style: italic;
             font-size: 18px;
+            color: #e0cfa9;
+            margin-bottom: 15px;
         }
-        .image-container img {
-            width: 200px;
-            height: auto;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-        .home-link {
-            display: block;
-            margin-top: 30px;
-            text-decoration: none;
-            color: #283618;
+        .réponse {
             font-weight: bold;
+            font-size: 20px;
+            color: #f9e3bd;
+            margin-top: 10px;
+        }
+        .back-button {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #666;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        .back-button:hover {
+            background-color: #444;
         }
     </style>
 </head>
 <body>
-    <h1>Léonie l’intuitive</h1>
+    <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie et Manchette">
 
-    <div class="image-container">
-        <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie">
+    <h2>Léonie et sa poule Manchette</h2>
+
+    <div class="boite">
+        {% if intro %}
+            <div class="intro">{{ intro }}</div>
+        {% endif %}
+
+        {% if answer %}
+            <div class="réponse">{{ answer }}</div>
+            <form method="post">
+                <button type="submit" name="nouvelle_question">Poser une autre question</button>
+            </form>
+        {% else %}
+            <form method="post">
+                <input type="text" name="question" placeholder="Pose ta question à Léonie et Manchette">
+                <br>
+                <button type="submit">Consulter Léonie</button>
+            </form>
+        {% endif %}
     </div>
 
-    <form method="post">
-        <input type="text" name="question" placeholder="Pose ta question à Léonie..." required>
-        <input type="submit" value="Demander à Léonie">
-    </form>
-
-    {% if intro %}
-        <div class="response-box">
-            <p><strong>{{ intro }}</strong></p>
-            <p>{{ answer }}</p>
-        </div>
-    {% endif %}
-
-    <a class="home-link" href="{{ url_for('accueil') }}">⇦ Changer d’oracle</a>
+    <div>
+        <a href="{{ url_for('accueil') }}" class="back-button">Changer d’oracle</a>
+    </div>
 </body>
 </html>
