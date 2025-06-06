@@ -119,39 +119,51 @@ def beber():
 @app.route('/leonie', methods=['GET', 'POST'])
 def leonie():
     if request.method == 'POST':
-        question = request.form.get("question", "").strip()
-        if question:
-            arcane = random.choice(arcanes)
-            indice = valeurs_arcanes[arcane]
-            intro = f"Léonie ferme les yeux… une carte apparaît : {arcane}."
-            answer = get_leonie_answer(question, arcane, indice)
+        choix1 = request.form.get("choix1", "").strip()
+        choix2 = request.form.get("choix2", "").strip()
+
+        if choix1 and choix2:
+            arcane1 = random.choice(arcanes)
+            arcane2 = random.choice(arcanes)
+
+            intro = f"Léonie ferme les yeux… Elle tire les cartes :\n- Pour le choix 1 : {arcane1}\n- Pour le choix 2 : {arcane2}"
+
+            answer = get_leonie_duel_answer(choix1, choix2, arcane1, arcane2)
+
             session['answer'] = answer
             session['intro'] = intro
+
         return redirect(url_for('leonie'))
 
     answer = session.pop('answer', None)
     intro = session.pop('intro', None)
     return render_template('index2.html', answer=answer, intro=intro)
 
-def get_leonie_answer(question, arcane, indice):
+def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     prompt = f"""
-    Tu es Léonie, voyante moitié sorcière décalée et irrévérencieuse. Tu as les cheveux en bataille, une poule nommée Manchette sur l'épaule.
-    Tu tires une carte du tarot de Marseille pour répondre, mais tu observes aussi les signes autour de toi : comportements de Manchette, craquements, ombres, sensations étranges.
+    Tu es Léonie, une voyante intuitive et espiègle, accompagnée de ta petite poule noire Manchette.
+    On te consulte uniquement pour aider à choisir entre deux options.
 
-    Ton ton est inspiré des sorcières de contes ou de films, sans jamais les citer : imagé, un peu moqueur, décalé, provocant. 
-    Tu ne cherches pas à plaire ni à rassurer. 
-    Tu interdis toute formule molle de développement personnel ("reste ouvert", "sois attentif", etc.).
+    Voici les deux options :
+    1. {choix1}
+    2. {choix2}
 
-    Tu as tiré la carte : {arcane} (indice {indice}).
-    Tu commences ta réponse par : "Je vois la carte {arcane}..."
-    Puis tu t'en inspires pour répondre en 1 à 3 phrases maximum, en y mêlant au moins un signe ou comportement perçu (Manchette ou environnement).
+    Tu tires deux cartes du tarot de Marseille pour guider ton conseil.
 
-    Plus l'indice est élevé, plus ta réponse est confiante ou positive. Plus il est bas, plus elle est sombre, inquiétante, voire provocante.
+    Voici les cartes tirées :
+    - Pour le choix 1 : {arcane1}
+    - Pour le choix 2 : {arcane2}
 
-    Tu ne sais pas si la personne qui pose la question est un homme ou une femme. 
-    Ton collègue voyant s'appelle Béber et travaille dans la pièce voisine.
+    Ta réponse doit comporter :
+    1️⃣ Une courte lecture de la première carte en lien avec le choix 1.
+    2️⃣ Une courte lecture de la deuxième carte en lien avec le choix 2.
+    3️⃣ Une synthèse finale claire : vers quel choix penches-tu, ou si les signes sont trop ambigus pour trancher.
+    4️⃣ Optionnellement, un petit commentaire espiègle ou étrange de ta poule Manchette.
 
-    Question : {question}
+    Ton style est celui d’une sorcière malicieuse de conte, un peu irrévérencieuse, toujours sincère.
+
+    Réponds en 3 à 4 phrases maximum.
+
     Réponse :
     """
 
@@ -159,15 +171,15 @@ def get_leonie_answer(question, arcane, indice):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Tu es Léonie, une voyante douce mais déterminée, qui tire une carte et répond clairement sans détour ni conseils flous."},
+                {"role": "system", "content": "Tu es Léonie, voyante spécialisée dans le tirage entre deux choix. Ton ton est espiègle, décalé, jamais fade."},
                 {"role": "user", "content": prompt.strip()}
             ],
-            max_tokens=120,
-            temperature=1.0,  # légèrement réduit
+            max_tokens=200,
+            temperature=1.2,
         )
         return response.choices[0].message['content'].strip()
     except Exception as e:
-        return "Léonie ne parvient pas à voir clairement pour le moment."
+        return "Léonie ne parvient pas à lire clairement les signes cette fois."
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

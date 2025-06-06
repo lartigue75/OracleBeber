@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Cabinet de Léonie</title>
+    <title>Léonie et sa poule Manchette — tirage entre deux choix</title>
     <style>
         body {
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
@@ -76,7 +76,7 @@
 <body>
     <img src="{{ url_for('static', filename='leonie.jpeg') }}" alt="Léonie et Manchette">
 
-    <h2>Léonie et sa poule Manchette</h2>
+    <h2>Léonie et sa poule Manchette — le duel des choix</h2>
 
     <div class="boite">
         {% if intro %}
@@ -86,13 +86,19 @@
         {% if answer %}
             <div class="réponse">{{ answer }}</div>
             <form method="post">
-                <button type="submit" name="nouvelle_question">Poser une autre question</button>
+                <input type="text" name="choix1" placeholder="Premier choix">
+                <br>
+                <input type="text" name="choix2" placeholder="Deuxième choix">
+                <br>
+                <button type="submit">Tirer les cartes</button>
             </form>
         {% else %}
             <form method="post">
-                <input type="text" name="question" placeholder="Pose ta question à Léonie et Manchette">
+                <input type="text" name="choix1" placeholder="Premier choix">
                 <br>
-                <button type="submit">Consulter Léonie</button>
+                <input type="text" name="choix2" placeholder="Deuxième choix">
+                <br>
+                <button type="submit">Tirer les cartes</button>
             </form>
         {% endif %}
     </div>
