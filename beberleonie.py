@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import openai
 import random
+import dropbox
 
 app = Flask(__name__)
 app.secret_key = 'béber-et-léonie'
@@ -43,23 +44,35 @@ valeurs_arcanes = {
 
 arcanes = list(valeurs_arcanes.keys())
 
-# ROUTE D'ACCUEIL
+# Initialiser la connexion Dropbox
+DROPBOX_TOKEN = os.environ.get("DROPBOX_TOKEN")  # On va le mettre dans Render après
+dbx = dropbox.Dropbox(DROPBOX_TOKEN)
+
+def get_visite_count():
+    compteur_path = "/CabinetVoyanceCompteur/compteur.txt"
+
+    try:
+        # Télécharger le fichier compteur
+        _, res = dbx.files_download(compteur_path)
+        count = int(res.content.decode().strip())
+    except dropbox.exceptions.ApiError as e:
+        print("Erreur Dropbox lecture compteur :", e)
+        count = 0  # si le fichier n’existe pas ou autre erreur
+
+    # Incrémenter le compteur
+    count += 1
+
+    # Sauvegarder la nouvelle valeur
+    dbx.files_upload(str(count).encode(), compteur_path, mode=dropbox.files.WriteMode.overwrite)
+
+    return count
+
+# ROUTE D'ACCUEIL modifiée
 @app.route('/')
 def accueil():
-    compteur_path = 'compteur.txt'
-    if not os.path.exists(compteur_path):
-        with open(compteur_path, 'w') as f:
-            f.write('0')
-
-    # Lire, incrémenter, et réécrire le compteur
-    with open(compteur_path, 'r+') as f:
-        count = int(f.read() or 0)
-        count += 1
-        f.seek(0)
-        f.write(str(count))
-        f.truncate()
-
+    count = get_visite_count()
     return render_template("accueil.html", visites=count)
+
 
 # ORACLE BÉBER
 STYLES_PERSONNAGES = [
