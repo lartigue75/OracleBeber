@@ -2,39 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import openai
 import random
-import requests  # Pour le refresh token
-import dropbox
 
 app = Flask(__name__)
 app.secret_key = 'béber-et-léonie'
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
-
-# Initialiser la connexion Dropbox avec refresh token
-DROPBOX_REFRESH_TOKEN = os.environ.get("DROPBOX_REFRESH_TOKEN")
-DROPBOX_APP_KEY = "xbbfivq6iwffc1z"
-DROPBOX_APP_SECRET = "irzrsuswnj9ap7g"
-
-def get_access_token_from_refresh():
-    url = "https://api.dropboxapi.com/oauth2/token"
-    data = {
-        "grant_type": "refresh_token",
-        "refresh_token": DROPBOX_REFRESH_TOKEN,
-    }
-    auth = (DROPBOX_APP_KEY, DROPBOX_APP_SECRET)
-    response = requests.post(url, data=data, auth=auth)
-
-    if response.status_code == 200:
-        token_data = response.json()
-        access_token = token_data["access_token"]
-        return access_token
-    else:
-        print("Erreur lors du refresh token :", response.text)
-        return None
-
-# On récupère un access token valide
-access_token = get_access_token_from_refresh()
-dbx = dropbox.Dropbox(access_token)
 
 # Tonalités communes
 TONALITES = [
@@ -71,25 +43,32 @@ valeurs_arcanes = {
 
 arcanes = list(valeurs_arcanes.keys())
 
-# ROUTE D'ACCUEIL
+def get_visite_count():
+    compteur_path = "compteur.txt"
+
+    # Si le fichier n’existe pas, on le crée à 0
+    if not os.path.exists(compteur_path):
+        with open(compteur_path, "w") as f:
+            f.write("0")
+
+    # Lire le compteur
+    with open(compteur_path, "r+") as f:
+        count = int(f.read().strip() or "0")  # Sécurité : si vide
+
+        # Incrémenter
+        count += 1
+
+        # Réécrire
+        f.seek(0)
+        f.write(str(count))
+        f.truncate()
+
+    return count
+
+# ROUTE D'ACCUEIL avec compteur interne
 @app.route('/')
 def accueil():
-    compteur_path = "/CabinetVoyanceCompteur/compteur.txt"
-
-    try:
-        _, res = dbx.files_download(compteur_path)
-        count = int(res.content.decode().strip())
-    except dropbox.exceptions.ApiError as e:
-        print("Erreur Dropbox lecture compteur :", e)
-        count = 0
-
-    count += 1
-
-    try:
-        dbx.files_upload(str(count).encode(), compteur_path, mode=dropbox.files.WriteMode.overwrite)
-    except dropbox.exceptions.ApiError as e:
-        print("Erreur Dropbox écriture compteur :", e)
-
+    count = get_visite_count()
     return render_template("accueil.html", visites=count)
 
 # ORACLE BÉBER
