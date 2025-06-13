@@ -146,13 +146,17 @@ def morgane():
     return render_template('index3.html', answer=answer, intro=intro)
 
 def get_morgane_answer(question, tonalite):
+    # Vérifier le nombre de questions
+    nb_questions = question.count("?")
+    if nb_questions >= 2:
+        return "Choisis une seule question, je ne scruterai qu’un seul fil du destin."
+
     prompt = f"""
     Tu es Morgane d’Avalon, puissante magicienne et sœur du roi Arthur.
     Tu réponds depuis des dimensions lointaines, avec un style lent, grave, légèrement énigmatique.
     Tu tires ta réponse des vibrations du quartz et de l’aléa.
 
     Règles :
-    - Si la question contient plusieurs questions, réponds uniquement ceci : "Choisis une seule question, je ne scruterai qu’un seul fil du destin."
     - Ne jamais utiliser les mots : secret(s), caché(e)(s), enfoui(e)(s), danse, danser.
     - Ta réponse doit tenir en 1 ou 2 phrases maximum.
     - Elle doit être marquée par la tonalité suivante : {tonalite}.
