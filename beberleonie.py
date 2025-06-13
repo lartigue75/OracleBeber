@@ -132,7 +132,7 @@ def morgane():
 
         if question:
             tonalite = random.choice(TONALITES)
-            intro = "Morgane ferme les yeux, effleure son quartz… une réponse émerge des brumes d’Avalon."
+            intro = "Morgane ferme les yeux..."
 
             answer = get_morgane_answer(question, tonalite)
 
