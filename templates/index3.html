@@ -5,8 +5,8 @@
     <title>Morgane d'Avalon, magicienne et guérisseuse, soeur du Roi Arthur</title>
     <style>
         body {
-            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
-            background-color: #1e1e1e;
+            background-image: url('https://www.transparenttextures.com/patterns/white-waves.png');
+            background-color: #2b2b2b;
             color: #f4e8d8;
             font-family: 'Georgia', serif;
             text-align: center;
@@ -85,30 +85,18 @@
 
         {% if answer %}
             <div class="réponse">{{ answer }}</div>
-            <form method="post">
-                <input type="text" name="choix1" placeholder="Premier choix">
-                <br>
-                <input type="text" name="choix2" placeholder="Deuxième choix">
-                <br>
-                <button type="submit">Tirer les cartes</button>
-            </form>
-        {% else %}
-            <form method="post">
-		<p>Pose ta question. De dimensions lointaines, Morgane, y répondra à travers quartz et aléa..</p>
+        {% endif %}
 
-                <input type="text" name="choix1" placeholder="Premier choix">
-                <br>
-        	<button type="submit">Obtenir une réponse</button>
-            </form>
-            {% if answer %}
-        	<div class="response">
-            		<p class="intro">{{ intro }}</p>
-           		<p>{{ answer }}</p>
-        	</div>
-    	{% endif %}
+        <form method="post">
+            <p>Pose ta question. De dimensions lointaines, Morgane y répondra à travers quartz et aléa.</p>
+            <input type="text" name="choix1" placeholder="Pose ta question ici...">
+            <br>
+            <button type="submit">Obtenir une réponse</button>
+        </form>
+    </div>
 
-    	<div class="retour">
-        	<a href="/" class="oracle-button">🔁 Changer de voyant</a>
-    	</div>
+    <div class="retour">
+        <a href="/" class="back-button">🔁 Changer de voyant</a>
+    </div>
 </body>
 </html>
