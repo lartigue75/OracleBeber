@@ -98,15 +98,17 @@
 
                 <input type="text" name="choix1" placeholder="Premier choix">
                 <br>
-                <input type="text" name="choix2" placeholder="Deuxième choix">
-                <br>
-                <button type="submit">Tirer les cartes</button>
+        	<button type="submit">Obtenir une réponse</button>
             </form>
-        {% endif %}
-    </div>
+            {% if answer %}
+        	<div class="response">
+            		<p class="intro">{{ intro }}</p>
+           		<p>{{ answer }}</p>
+        	</div>
+    	{% endif %}
 
-    <div>
-        <a href="{{ url_for('accueil') }}" class="back-button">Changer d’oracle</a>
-    </div>
+    	<div class="retour">
+        	<a href="/" class="oracle-button">🔁 Changer de voyant</a>
+    	</div>
 </body>
 </html>
