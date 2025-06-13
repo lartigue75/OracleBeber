@@ -124,6 +124,60 @@ def beber():
     intro = session.pop('intro', None)
     return render_template('index.html', answer=answer, intro=intro)
 
+# ORACLE MORGANE D'AVALON
+@app.route('/morgane', methods=['GET', 'POST'])
+def morgane():
+    if request.method == 'POST':
+        question = request.form.get("question", "").strip()
+
+        if question:
+            tonalite = random.choice(TONALITES)
+            intro = "Morgane ferme les yeux, effleure son quartz… une réponse émerge des brumes d’Avalon."
+
+            answer = get_morgane_answer(question, tonalite)
+
+            session['answer'] = answer
+            session['intro'] = intro
+
+        return redirect(url_for('morgane'))
+
+    answer = session.pop('answer', None)
+    intro = session.pop('intro', None)
+    return render_template('index3.html', answer=answer, intro=intro)
+
+def get_morgane_answer(question, tonalite):
+    prompt = f"""
+    Tu es Morgane d’Avalon, puissante magicienne et sœur du roi Arthur.
+    Tu réponds depuis des dimensions lointaines, avec un style lent, grave, légèrement énigmatique.
+    Tu tires ta réponse des vibrations du quartz et de l’aléa.
+
+    Règles :
+    - Si la question contient plusieurs questions, réponds uniquement ceci : "Choisis une seule question, je ne scruterai qu’un seul fil du destin."
+    - Ne jamais utiliser les mots : secret(s), caché(e)(s), enfoui(e)(s), danse, danser.
+    - Ta réponse doit tenir en 1 ou 2 phrases maximum.
+    - Elle doit être marquée par la tonalité suivante : {tonalite}.
+    - Tu ne sais pas si la personne qui te consulte est un homme ou une femme.
+    - Ne conclus pas par un message de type "je vous souhaite..." ou "bonne chance".
+
+    Question : {question}
+
+    Réponse :
+    """
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Tu es Morgane d’Avalon, magicienne et sœur du roi Arthur. Ton style est posé, grave, légèrement énigmatique. Tu ne parles jamais plus que nécessaire."},
+                {"role": "user", "content": prompt.strip()}
+            ],
+            max_tokens=150,
+            temperature=1.1,
+        )
+        return response.choices[0].message['content'].strip()
+    except Exception as e:
+        return "Morgane ne parvient pas à capter les flux du destin en cet instant."
+
 # ORACLE LÉONIE
 @app.route('/leonie', methods=['GET', 'POST'])
 def leonie():
