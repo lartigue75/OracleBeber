@@ -158,7 +158,7 @@ def get_morgane_answer(question, tonalite):
 
     Règles :
     - Ne jamais utiliser les mots : secret(s), caché(e)(s), enfoui(e)(s), danse, danser.
-    - Ta réponse doit tenir en 1 ou 2 phrases maximum.
+    - Ta réponse doit tenir en 2 ou 3 phrases maximum.
     - Elle doit être marquée franchement par la tonalité suivante : {tonalite}.
     - Tu ne sais pas si la personne qui te consulte est un homme ou une femme.
     - Tes réponses doivent faire comprendre que la question est prise en compte.
