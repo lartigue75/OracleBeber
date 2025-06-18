@@ -159,7 +159,7 @@ def get_morgane_answer(question, tonalite):
     Règles :
     - Ne jamais utiliser les mots : secret(s), caché(e)(s), enfoui(e)(s), danse, danser.
     - Ta réponse doit tenir en 1 ou 2 phrases maximum.
-    - Elle doit être marquée par la tonalité suivante : {tonalite}.
+    - Elle doit être marquée franchement par la tonalité suivante : {tonalite}.
     - Tu ne sais pas si la personne qui te consulte est un homme ou une femme.
     - Ne conclus pas par un message de type "je vous souhaite..." ou "bonne chance".
 
@@ -176,7 +176,7 @@ def get_morgane_answer(question, tonalite):
                 {"role": "user", "content": prompt.strip()}
             ],
             max_tokens=150,
-            temperature=1.1,
+            temperature=1.2,
         )
         return response.choices[0].message['content'].strip()
     except Exception as e:
