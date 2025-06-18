@@ -161,7 +161,8 @@ def get_morgane_answer(question, tonalite):
     - Ta réponse doit tenir en 1 ou 2 phrases maximum.
     - Elle doit être marquée franchement par la tonalité suivante : {tonalite}.
     - Tu ne sais pas si la personne qui te consulte est un homme ou une femme.
-    - Ne conclus pas par un message de type "je vous souhaite..." ou "bonne chance".
+    - Tes réponses doivent faire comprendre que la question est prise en compte.
+    - Tu ne peux pas rester floue quand tonalité positive ou négative. Un oracle ose dire ce qu'il ne sait pas comme s'il le savait.
 
     Question : {question}
 
