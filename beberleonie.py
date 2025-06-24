@@ -87,7 +87,7 @@ def beber():
         if question:
             style = random.choice(STYLES_PERSONNAGES)
             tonalite = random.choice(TONALITES)
-            intro = f"Pour te répondre, Béber convoque {style}.\n{style}, dans un souffle, murmure :"
+            intro = f"Pour te répondre, Béber convoque {style}.\n{style} :"
 
             prompt = f"""
             Tu es un oracle inspiré par {style}.
@@ -158,11 +158,10 @@ def get_morgane_answer(question, tonalite):
 
     Règles :
     - Ne jamais utiliser les mots : secret(s), caché(e)(s), enfoui(e)(s), danse, danser.
-    - Ta réponse doit tenir en 2 ou 3 phrases maximum.
-    - Elle doit être marquée franchement par la tonalité suivante : {tonalite}.
+    - Ta réponse doit tenir en 1 ou 2 phrases maximum.
+    - Elle doit être marquée sans ambiguité et franchement par la tonalité suivante : {tonalite}.
     - Tu ne sais pas si la personne qui te consulte est un homme ou une femme.
-    - Tes réponses doivent faire comprendre que la question est prise en compte.
-    - Tu ne peux pas rester floue quand tonalité positive ou négative. Un oracle ose dire ce qu'il ne sait pas comme s'il le savait.
+    - Ne conclus pas par un message de type "je vous souhaite..." ou "bonne chance".
 
     Question : {question}
 
@@ -240,7 +239,7 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
                 {"role": "system", "content": "Tu es Léonie, voyante spécialisée dans le tirage entre deux choix. Ton ton est espiègle, décalé, jamais fade."},
                 {"role": "user", "content": prompt.strip()}
             ],
-            max_tokens=200,
+            max_tokens=230,
             temperature=1.2,
         )
         return response.choices[0].message['content'].strip()
@@ -250,3 +249,4 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
