@@ -5,25 +5,22 @@
     <title>Morgane d'Avalon, magicienne et guérisseuse, soeur du Roi Arthur</title>
     <style>
         body {
-            background-image: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png');
-            background-color: #f9f4f0;  /* fond clair légèrement ivoire */
-            color: #2b2b2b;
+            background-color: #fdfcf9; /* blanc très légerement cassé */
             font-family: 'Georgia', serif;
             text-align: center;
             padding-top: 50px;
+            color: #2b2b2b;
         }
         img {
             max-width: 300px;
             border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
         }
         .boite {
-            background-color: rgba(50, 30, 30, 0.85);
+            background-color: transparent;
             display: inline-block;
             padding: 25px;
-            border-radius: 15px;
-            border: 2px solid #8b5e3c;
             max-width: 600px;
             margin: 20px auto;
         }
@@ -33,43 +30,55 @@
             border-radius: 10px;
             border: 1px solid #ccc;
             margin-bottom: 15px;
-        }
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
             font-size: 16px;
-            background-color: #bb7e3c;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            color: #fff;
         }
-        button:hover {
-            background-color: #a3692c;
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #5c3b27; /* marron foncé */
+            color: white;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
         .intro {
             font-style: italic;
             font-size: 18px;
-            color: #e0cfa9;
+            color: #5a5a5a;
             margin-bottom: 15px;
         }
         .réponse {
             font-weight: bold;
             font-size: 20px;
-            color: #f9e3bd;
-            margin-top: 10px;
+            color: #6b3e99;
+            margin-top: 20px;
+        }
+        .retour {
+            margin-top: 30px;
         }
         .back-button {
-            margin-top: 20px;
             display: inline-block;
-            padding: 8px 15px;
-            background-color: #666;
-            color: #fff;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6a00, #ffb347);
+            color: white;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .back-button:hover {
-            background-color: #444;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
@@ -83,20 +92,21 @@
             <div class="intro">{{ intro }}</div>
         {% endif %}
 
+        <form method="post">
+            <p>Pose ta question. De dimensions lointaines, Morgane y répondra.</p>
+            <input type="text" name="question" placeholder="Pose ta question ici...">
+            <br>
+            <button type="submit">✨ Obtenir une réponse</button>
+        </form>
+
         {% if answer %}
             <div class="réponse">{{ answer }}</div>
         {% endif %}
-
-        <form method="post">
-            <p>Pose ta question. De dimensions lointaines, Morgane y répondra à travers quartz et aléa.</p>
-            <input type="text" name="question" placeholder="Pose ta question ici...">
-            <br>
-            <button type="submit">Obtenir une réponse</button>
-        </form>
     </div>
 
     <div class="retour">
-        <a href="/" class="back-button">🔁 Changer de voyant</a>
+        <a href="/" class="back-button">🔮 Changer d'oracle</a>
     </div>
 </body>
 </html>
+
