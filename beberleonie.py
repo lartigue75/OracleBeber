@@ -87,8 +87,11 @@ def beber():
         if question:
             style = random.choice(STYLES_PERSONNAGES)
             tonalite = random.choice(TONALITES)
-            intro = f"Pour te répondre, Béber convoque {style}.\n{style} :"
+            
+            # Extraire uniquement le nom du personnage (avant la virgule s'il y en a un)
+            nom_personnage = style.split(",")[0]
 
+            intro = f"Pour te répondre, Béber convoque {nom_personnage}.
             prompt = f"""
             Tu es un oracle inspiré par {style}.
             Tu réponds à la question suivante avec une tonalité {tonalite}.
@@ -249,4 +252,5 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
