@@ -2,75 +2,97 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Le Cabinet de Voyance le plus dingue du moment</title>
+    <title>Le Cabinet de Voyance</title>
     <style>
         body {
+            background-color: #f0e6dc;
             font-family: Georgia, serif;
-            background-color: #f8f5f0;
-            color: #333;
             text-align: center;
-            padding: 40px;
+            padding-top: 50px;
+            color: #333;
         }
-
-        img {
-            max-width: 400px;
-            border-radius: 20px;
-            box-shadow: 0 0 10px #aaa;
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
         }
-
         h2 {
-            margin-top: 30px;
-            font-size: 28px;
+            font-size: 22px;
+            margin-bottom: 30px;
         }
-
-        p {
-            font-size: 18px;
-        }
-
         .oracle-button {
             display: inline-block;
-            padding: 12px 24px;
+            padding: 15px 30px;
+            margin: 10px;
             font-size: 18px;
-            font-family: Georgia, serif;
-            background-color: #444;
+            background-color: #7a5c58;
             color: #fff;
+            border: none;
             border-radius: 10px;
             text-decoration: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin: 10px;
+            transition: background-color 0.3s ease;
         }
-
         .oracle-button:hover {
-            background-color: #666;
-            transform: translateY(-2px);
+            background-color: #5a3f3a;
         }
-
-        .compteur {
+        .visites {
             margin-top: 30px;
             font-size: 16px;
-            color: #666;
+            color: #777;
+        }
+        .avertissement {
+            background-color: #fdf6e3;
+            color: #333;
+            padding: 20px;
+            margin-top: 50px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .avertissement h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .avertissement p {
+            text-align: left;
+            margin-bottom: 12px;
+        }
+        .avertissement p strong {
+            color: #b22222;
         }
     </style>
 </head>
-
 <body>
 
-    <img src="/static/cabinet.jpeg" alt="Cabinet de voyance">
+    <h1>Bienvenue au Cabinet de Voyance</h1>
+    <h2>Choisis ton oracle :</h2>
 
-    <h2>Le Cabinet de Voyance le plus dingue du moment</h2>
+    <a href="/beber" class="oracle-button">🧙‍♂️ Béber le zinzin</a>
+    <a href="/leonie" class="oracle-button">🔮 Léonie la voyante</a>
+    <a href="/morgane" class="oracle-button">✨ Morgane d’Avalon</a>
 
-    <p>Quel oracle souhaitez-vous consulter ?</p>
-
-    <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
-        <a href="/beber" class="oracle-button">🧙‍♂️ Béber</a>
-        <a href="/leonie" class="oracle-button">🔮 Léonie (tirage entre 2 choix)</a>
-        <a href="/morgane" class="oracle-button">✨ Morgane d’Avalon</a>
+    <div class="visites">
+        Nombre de consultations : {{ visites }}
     </div>
 
-    <div class="compteur">
-        {{ visites }} âmes ont consulté le cabinet.
+    <div class="avertissement">
+        <h3>Principe de la règle du jeu</h3>
+        <p>
+            Celui qui interroge le hasard interagit avec la réponse avant même qu’elle soit formulée par l’oracle.
+        </p>
+        <p>
+            Il y a une part de vous dans le blabla de Béber. D’où l’importance de se rendre totalement disponible, détaché de toute attente. En lâcher-prise.
+        </p>
+        <p>
+            <strong>La première réponse est la bonne.</strong> Quand vous posez une question à un oracle, vous obtenez la réponse. Si vous reposez la même question, vous ne consultez plus l’oracle mais vous testez la réponse. Vous avez quitté la position de lâcher-prise pour entrer dans le doute, et donc hors de la règle du jeu.
+        </p>
+        <p>
+            Ce changement fausse les réponses, même si elles semblent cohérentes avec la première.
+        </p>
+        <p><strong>Avertissement :</strong> toute utilisation en dehors de ces règles peut entraîner des désordres psychiques proches de ceux de l’addiction. La modération est de mise ici aussi.</p>
+        <p><em>La vérité n’est pas plus garantie ici qu’ailleurs.</em></p>
     </div>
 
 </body>
 </html>
+
