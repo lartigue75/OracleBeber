@@ -91,7 +91,7 @@ def beber():
             # Extraire uniquement le nom du personnage (avant la virgule s'il y en a un)
             nom_personnage = style.split(",")[0]
 
-            intro = f"Pour te répondre, Béber convoque {nom_personnage}.\Dans un souffle, il murmure :"
+            intro = f"Pour te répondre, Béber convoque {nom_personnage}.\n Dans un souffle, il murmure :"
             prompt = f"""
             Tu es un oracle inspiré par {style}.
             Tu réponds à la question suivante avec une tonalité {tonalite}.
