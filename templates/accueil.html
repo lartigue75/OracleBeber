@@ -69,6 +69,14 @@
     </style>
 </head>
 <body>
+<header>
+  <nav>
+    <ul style="list-style:none; display:flex; justify-content:center; gap:20px; padding:0;">
+      <li><a href="/" style="text-decoration:none;">Accueil</a></li>
+      <li><a href="/faq" style="text-decoration:none;">FAQ</a></li>
+    </ul>
+  </nav>
+</header>
 
     <img src="/static/cabinet.jpeg" alt="Cabinet de voyance">
     <h2>Le cabinet de voyance le plus dingue du moment !</h2>
@@ -82,7 +90,7 @@
         Nombre de consultations : {{ visites }}
     </div>
 
-    <div class="avertissement">
+    <main role="presentation" class="avertissement">
         <h3>Principe de la règle du jeu</h3>
         <p>
             Celui qui interroge le hasard interagit avec la réponse avant même qu’elle soit formulée par l’oracle.
@@ -102,4 +110,5 @@
 
 </body>
 </html>
+
 
