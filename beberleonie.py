@@ -209,6 +209,11 @@ def leonie():
     intro = session.pop('intro', None)
     return render_template('index2.html', answer=answer, intro=intro)
 
+#Oracle Maths
+@app.route("/math")
+def math():
+    return render_template("index4.html")
+
 def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     prompt = f"""
     Tu es Léonie, une voyante intuitive, espiègle et un peu irrévérencieuse. Tu tires les cartes pour aider à choisir entre deux options.
