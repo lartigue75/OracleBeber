@@ -1,138 +1,186 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Le Cabinet de Voyance</title>
-    <meta name="robots" content="noarchive">
-    <style>
-        body {
-            background-color: #f0e6dc;
-            font-family: Georgia, serif;
-            text-align: center;
-            padding-top: 50px;
-            color: #333;
-        }
-        header nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 0;
-        }
-        header nav a {
-            text-decoration: none;
-            color: #7a5c58;
-            font-weight: bold;
-        }
-
-        img {
-            max-width: 350px; /* réduite de moitié */
-            border-radius: 20px;
-            box-shadow: 0 0 10px #aaa;
-        }
-
-        h2 {
-            margin-top: 30px;
-            font-size: 28px;
-        }
-
-        p {
-            font-size: 18px;
-        }
-
-        .oracle-button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 18px;
-            background-color: #7a5c58;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-
-        .oracle-button:hover {
-            background-color: #5a3f3a;
-        }
-
-        .visites {
-            margin-top: 30px;
-            font-size: 16px;
-            color: #777;
-        }
-
-        .avertissement, .avertissement-1, .avertissement-2, .avertissement-3 {
-            background-color: #fdf6e3;
-            color: #333;
-            padding: 20px;
-            margin: 30px auto;
-            border-radius: 10px;
-            max-width: 700px;
-            text-align: left;
-        }
-
-        .avertissement h3 {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .avertissement p strong,
-        .avertissement-3 p strong {
-            color: #b22222;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Cabinet Stochastique</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f5f5f5;
+      color: #222;
+      padding: 2em;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+    img {
+      display: block;
+      margin: 0 auto 1em auto;
+      width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+    .box { margin: 1em 0; }
+    label { margin-right: 1em; }
+    textarea {
+      width: 100%;
+      height: 60px;
+      font-family: monospace;
+      margin-bottom: 1em;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 0.5em;
+    }
+    .result {
+      background: #e0e0e0;
+      padding: 1em;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <ul style="display:none;">
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+  <h1>Cabinet Pur Stochastique</h1>
+  <img src="{{ url_for('static', filename='nombres.jpeg') }}" alt="Chiffres flottants dans le cosmos">
+  <p>Un oracle mathématique appliquant la règle du jeu. Choisissez votre mode, posez votre question, et observez ce que le hasard vous révèle.</p>
 
-    <img src="/static/cabinet.jpeg" alt="Cabinet de voyance">
-    <h2>Le cabinet de voyance le plus dingue du moment !</h2>
-    <p>Quel oracle souhaitez-vous consulter ?</p>
+  <div class="box">
+    <strong>Type d’oracle :</strong><br>
+    <label><input type="radio" name="mode" value="binaire" checked> Binaire (Oui / Non)</label>
+    <label><input type="radio" name="mode" value="numérique"> Numérique (1 à 100)</label>
+    <label><input type="radio" name="mode" value="catégoriel"> Catégoriel (tirage parmi options)</label>
+  </div>
 
-    <a href="/beber" class="oracle-button">🧙‍♂️ Béber le zinzin</a>
-    <a href="/leonie" class="oracle-button">🔮 Léonie la voyante</a>
-    <a href="/morgane" class="oracle-button">✨ Morgane d’Avalon</a>
-    <a href="/math" class="oracle-button">🧮 L’oracle mathématique</a>
+  <div class="box" id="questionBox">
+    <textarea id="question" placeholder="Posez votre question ici... (facultatif en mode 'choix')"></textarea>
+  </div>
 
+  <div class="box" id="categorieBox" style="display: none;">
+    <label>Choix (séparés par des virgules) :</label><br>
+    <input type="text" id="options" placeholder="ex : pain, fromage, vin" style="width:100%;">
+  </div>
 
-    <div class="visites">
-        Nombre de consultations : {{ visites }}
-    </div>
+  <div class="box">
+    <strong>Source du hasard :</strong><br>
+    <label><input type="radio" name="source" value="pseudo" checked> Pseudo-aléatoire</label>
+    <label><input type="radio" name="source" value="timing"> Timing de saisie</label>
+  </div>
 
-    <div class="avertissement-1">
-        <h3>Principe de la règle du jeu</h3>
-        <p>
-            Celui qui interroge le hasard interagit avec la réponse avant même qu’elle soit formulée par l’oracle.
-        </p>
-        <p>
-            Il y a une part de vous dans le blabla de Béber. D’où l’importance de se rendre totalement disponible, détaché de toute attente. En lâcher-prise.
-        </p>
-    </div>
+  <div class="box">
+    <button onclick="consulterOracle()">✨ Consulter l'Oracle</button>
+    <button onclick="effacerHistorique()">🗑️ Effacer l’historique</button>
+  </div>
 
-    <div class="avertissement-2">
-        <p>
-            <strong>La première réponse est la bonne.</strong> Quand vous posez une question à un oracle, vous obtenez la réponse. Si vous reposez la même question, vous ne consultez plus l’oracle mais vous testez la réponse. Vous avez quitté la position de lâcher-prise pour entrer dans le doute, et donc hors de la règle du jeu.
-        </p>
-        <p>
-            Ce changement fausse les réponses, même si elles semblent cohérentes avec la première.
-        </p>
-    </div>
+  <div class="result" id="resultat"></div>
 
-    <div class="avertissement-3">
-        <p><strong>Avertissement :</strong> toute utilisation en dehors de ces règles peut entraîner des désordres psychiques proches de ceux de l’addiction. La modération est de mise ici aussi.</p>
-        <p><em>La vérité n’est pas plus garantie ici qu’ailleurs.</em></p>
-    </div>
+  <div style="text-align: center; margin-top: 2em;">
+    <a href="/" style="text-decoration: none;">
+      <button style="padding: 0.6em 1.2em; font-size: 1em; cursor: pointer;">🔁 Changer de voyant</button>
+    </a>
+  </div>
+
+  <script>
+    let dernierTemps = performance.now();
+
+    document.getElementsByName("mode").forEach(radio => {
+      radio.addEventListener("change", () => {
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        document.getElementById("categorieBox").style.display = (mode === "catégoriel") ? "block" : "none";
+        document.getElementById("questionBox").style.display = (mode === "catégoriel") ? "none" : "block";
+      });
+    });
+
+    function getRandomIndex(arrayLength, source) {
+      if (source === "timing") {
+        const now = performance.now();
+        const delta = now - dernierTemps;
+        dernierTemps = now;
+        return Math.floor(delta % arrayLength);
+      } else {
+        return Math.floor(Math.random() * arrayLength);
+      }
+    }
+
+    function consulterOracle() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const source = document.querySelector('input[name="source"]:checked').value;
+      let question = document.getElementById("question").value.trim();
+      const resDiv = document.getElementById("resultat");
+      let réponse = "";
+
+      if ((mode === "binaire" || mode === "numérique") && !question) {
+        resDiv.textContent = "L’oracle ne répond pas sans question.";
+        return;
+      }
+
+      if (mode === "binaire") {
+        const choix = ["Oui", "Non"];
+        réponse = choix[getRandomIndex(choix.length, source)];
+      }
+      else if (mode === "numérique") {
+        const valeur = getRandomIndex(100, source) + 1;
+        réponse = "Nombre tiré : " + valeur;
+      }
+      else if (mode === "catégoriel") {
+        const input = document.getElementById("options").value.trim();
+        if (!input) {
+          resDiv.textContent = "Veuillez entrer des choix pour le tirage.";
+          return;
+        }
+        const items = input.split(",").map(s => s.trim()).filter(Boolean);
+        if (items.length < 2) {
+          resDiv.textContent = "Au moins deux choix requis.";
+          return;
+        }
+        const tiré = items[getRandomIndex(items.length, source)];
+        réponse = "Tirage : " + tiré;
+
+        if (!question) question = "[tirage parmi : " + items.join(", ") + "]";
+      }
+
+      const log = { question, réponse };
+      enregistrerDansHistorique(log);
+      afficherHistorique();
+      document.getElementById("question").value = "";
+    }
+
+    function enregistrerDansHistorique(entry) {
+      let historique = JSON.parse(sessionStorage.getItem("historique") || "[]");
+      historique.push(entry);
+      sessionStorage.setItem("historique", JSON.stringify(historique));
+    }
+
+    function afficherHistorique() {
+      const resDiv = document.getElementById("resultat");
+      const historique = JSON.parse(sessionStorage.getItem("historique") || "[]");
+
+      if (historique.length === 0) {
+        resDiv.innerHTML = "Aucun tirage effectué pour cette session.";
+        return;
+      }
+
+      let html = "<strong>Historique de la session :</strong><br><ul>";
+      historique.slice().reverse().forEach(entry => {
+        html += `<li><em>${entry.question}</em><br>➡️ ${entry.réponse}</li>`;
+      });
+      html += "</ul>";
+      resDiv.innerHTML = html;
+    }
+
+    function effacerHistorique() {
+      sessionStorage.removeItem("historique");
+      afficherHistorique();
+    }
+
+    afficherHistorique();
+  </script>
 
 </body>
 </html>
-
