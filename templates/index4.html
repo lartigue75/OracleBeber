@@ -47,7 +47,7 @@
 </head>
 <body>
 
-  <h1>Cabinet Stochastique</h1>
+  <h1>Oracle Purement Stochastique</h1>
   <img src="{{ url_for('static', filename='nombres.jpeg') }}" alt="Chiffres flottants dans le cosmos">
   <p>Un oracle mathématique appliquant la règle du jeu. Choisissez votre mode, posez votre question, et observez ce que le hasard vous révèle.</p>
 
@@ -79,6 +79,12 @@
   </div>
 
   <div class="result" id="resultat"></div>
+
+  <div style="text-align: center; margin-top: 2em;">
+    <a href="/" style="text-decoration: none;">
+      <button style="padding: 0.6em 1.2em; font-size: 1em; cursor: pointer;">🔁 Changer de voyant</button>
+    </a>
+  </div>
 
   <script>
     let dernierTemps = performance.now();
