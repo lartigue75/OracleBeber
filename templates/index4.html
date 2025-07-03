@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Cabinet Stochastique</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f5f5f5;
+      color: #222;
+      padding: 2em;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 0.5em;
+    }
+    img {
+      display: block;
+      margin: 0 auto 1em auto;
+      width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+    .box { margin: 1em 0; }
+    label { margin-right: 1em; }
+    textarea {
+      width: 100%;
+      height: 60px;
+      font-family: monospace;
+      margin-bottom: 1em;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 0.5em;
+    }
+    .result {
+      background: #e0e0e0;
+      padding: 1em;
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Cabinet Stochastique</h1>
+  <img src="nombres.jpeg" alt="Chiffres flottants dans le cosmos">
+  <p>Un oracle mathématique appliquant la règle du jeu. Choisissez votre mode, posez votre question, et observez ce que le hasard vous révèle.</p>
+
+  <div class="box">
+    <strong>Type d’oracle :</strong><br>
+    <label><input type="radio" name="mode" value="binaire" checked> Binaire (Oui / Non)</label>
+    <label><input type="radio" name="mode" value="numérique"> Numérique (1 à 100)</label>
+    <label><input type="radio" name="mode" value="catégoriel"> Catégoriel (tirage parmi options)</label>
+  </div>
+
+  <div class="box" id="questionBox">
+    <textarea id="question" placeholder="Posez votre question ici... (facultatif en mode 'choix')"></textarea>
+  </div>
+
+  <div class="box" id="categorieBox" style="display: none;">
+    <label>Choix (séparés par des virgules) :</label><br>
+    <input type="text" id="options" placeholder="ex : pain, fromage, vin" style="width:100%;">
+  </div>
+
+  <div class="box">
+    <strong>Source du hasard :</strong><br>
+    <label><input type="radio" name="source" value="pseudo" checked> Pseudo-aléatoire</label>
+    <label><input type="radio" name="source" value="timing"> Timing de saisie</label>
+  </div>
+
+  <div class="box">
+    <button onclick="consulterOracle()">✨ Consulter l'Oracle</button>
+    <button onclick="effacerHistorique()">🗑️ Effacer l’historique</button>
+  </div>
+
+  <div class="result" id="resultat"></div>
+
+  <script>
+    let dernierTemps = performance.now();
+
+    document.getElementsByName("mode").forEach(radio => {
+      radio.addEventListener("change", () => {
+        const mode = document.querySelector('input[name="mode"]:checked').value;
+        document.getElementById("categorieBox").style.display = (mode === "catégoriel") ? "block" : "none";
+        document.getElementById("questionBox").style.display = (mode === "catégoriel") ? "none" : "block";
+      });
+    });
+
+    function getRandomIndex(arrayLength, source) {
+      if (source === "timing") {
+        const now = performance.now();
+        const delta = now - dernierTemps;
+        dernierTemps = now;
+        return Math.floor(delta % arrayLength);
+      } else {
+        return Math.floor(Math.random() * arrayLength);
+      }
+    }
+
+    function consulterOracle() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const source = document.querySelector('input[name="source"]:checked').value;
+      let question = document.getElementById("question").value.trim();
+      const resDiv = document.getElementById("resultat");
+      let réponse = "";
+
+      if ((mode === "binaire" || mode === "numérique") && !question) {
+        resDiv.textContent = "L’oracle ne répond pas sans question.";
+        return;
+      }
+
+      if (mode === "binaire") {
+        const choix = ["Oui", "Non"];
+        réponse = choix[getRandomIndex(choix.length, source)];
+      }
+      else if (mode === "numérique") {
+        const valeur = getRandomIndex(100, source) + 1;
+        réponse = "Nombre tiré : " + valeur;
+      }
+      else if (mode === "catégoriel") {
+        const input = document.getElementById("options").value.trim();
+        if (!input) {
+          resDiv.textContent = "Veuillez entrer des choix pour le tirage.";
+          return;
+        }
+        const items = input.split(",").map(s => s.trim()).filter(Boolean);
+        if (items.length < 2) {
+          resDiv.textContent = "Au moins deux choix requis.";
+          return;
+        }
+        const tiré = items[getRandomIndex(items.length, source)];
+        réponse = "Tirage : " + tiré;
+
+        if (!question) question = "[tirage parmi : " + items.join(", ") + "]";
+      }
+
+      const log = { question, réponse };
+      enregistrerDansHistorique(log);
+      afficherHistorique();
+      document.getElementById("question").value = "";
+    }
+
+    function enregistrerDansHistorique(entry) {
+      let historique = JSON.parse(sessionStorage.getItem("historique") || "[]");
+      historique.push(entry);
+      sessionStorage.setItem("historique", JSON.stringify(historique));
+    }
+
+    function afficherHistorique() {
+      const resDiv = document.getElementById("resultat");
+      const historique = JSON.parse(sessionStorage.getItem("historique") || "[]");
+
+      if (historique.length === 0) {
+        resDiv.innerHTML = "Aucun tirage effectué pour cette session.";
+        return;
+      }
+
+      let html = "<strong>Historique de la session :</strong><br><ul>";
+      historique.slice().reverse().forEach(entry => {
+        html += `<li><em>${entry.question}</em><br>➡️ ${entry.réponse}</li>`;
+      });
+      html += "</ul>";
+      resDiv.innerHTML = html;
+    }
+
+    function effacerHistorique() {
+      sessionStorage.removeItem("historique");
+      afficherHistorique();
+    }
+
+    afficherHistorique();
+  </script>
+
+</body>
+</html>
