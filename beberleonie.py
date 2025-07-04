@@ -214,6 +214,11 @@ def leonie():
 def math():
     return render_template("index4.html")
 
+#A lire
+@app.route('/a-lire')
+def a_lire():
+    return render_template("index5.html")
+
 def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     prompt = f"""
     Tu es Léonie, une voyante intuitive, espiègle et un peu irrévérencieuse. Tu tires les cartes pour aider à choisir entre deux options.
