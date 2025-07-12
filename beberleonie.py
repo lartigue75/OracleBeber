@@ -309,6 +309,11 @@ def anselme():
 
     return render_template('index6.html', nom_personne=nom_personne, mots_tires=', '.join(mots_tires), interpretation=interpretation, historique=historique)
 
+@app.route('/anselme/clear', methods=['POST'])
+def clear_anselme():
+    session['historique_anselme'] = []
+    return redirect(url_for('anselme'))
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
