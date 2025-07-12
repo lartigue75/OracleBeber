@@ -118,6 +118,9 @@
     {% if historique %}
         <div class="historique">
             <h4>Historique des tirages :</h4>
+            <form method="post" action="/anselme/clear">
+                <button type="submit" style="font-size:12px; padding:6px 12px; margin-bottom:10px;">🗑️ Effacer l'historique</button>
+            </form>
             <ul>
                 {% for item in historique %}
                     <li>{{ item|safe }}</li>
