@@ -91,7 +91,8 @@ def beber():
             # Extraire uniquement le nom du personnage (avant la virgule s'il y en a un)
             nom_personnage = style.split(",")[0]
 
-            intro = f"Pour te répondre, Béber convoque {nom_personnage}.\n Dans un souffle, il murmure :"
+            intro = f"Pour te répondre, Béber convoque {nom_personnage}. Dans un souffle, il murmure :"
+
             prompt = f"""
             Tu es un oracle inspiré par {style}.
             Tu réponds à la question suivante avec une tonalité {tonalite}.
@@ -209,15 +210,10 @@ def leonie():
     intro = session.pop('intro', None)
     return render_template('index2.html', answer=answer, intro=intro)
 
-#Oracle Maths
+#Oracle MATHS
 @app.route("/math")
 def math():
     return render_template("index4.html")
-
-#A lire
-@app.route('/a-lire')
-def a_lire():
-    return render_template("index5.html")
 
 def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     prompt = f"""
@@ -259,8 +255,62 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     except Exception as e:
         return "Léonie ne parvient pas à lire clairement les signes cette fois."
 
+# Charger le dictionnaire français
+def charger_dictionnaire():
+    with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
+        return set(m.strip().lower() for m in f if len(m.strip()) >= 5)
+
+mots_fr = charger_dictionnaire()
+
+# Fonction pour générer trois mots aléatoires
+def generer_trois_mots():
+    sequence = ""
+    mots_trouves = []
+    while len(mots_trouves) < 3:
+        bloc = ''.join(random.choice(string.ascii_lowercase) for _ in range(20))
+        sequence += bloc
+        if len(sequence) > 1000:
+            sequence = sequence[-1000:]
+        fenetre = sequence[-100:]
+        mot_trouve = next((m for m in mots_fr if m in fenetre), None)
+        if mot_trouve and mot_trouve not in mots_trouves:
+            mots_trouves.append(mot_trouve)
+    return mots_trouves
+
+# Route pour Anselme
+@app.route('/anselme', methods=['GET', 'POST'])
+def anselme():
+    interpretation = ""
+    mots_tires = []
+    historique = []
+    nom_personne = ""
+    
+    if request.method == 'POST':
+        nom_personne = request.form['nom_personne'] or "l'Inconnu"
+        mots_tires = generer_trois_mots()
+        prompt = f"""
+        Tu es un médium. Trois mots ont été tirés au hasard pour {nom_personne} : {', '.join(mots_tires)}.
+        Compose une phrase courte et imagée qui relie ces trois mots.
+        Adapte le ton selon la personnalité du locuteur :
+        - Si c'est une célébrité connue, inspire-toi légèrement de son style ou de ses idées.
+        - Si c'est une personne inconnue, joue simplement sur le ton masculin ou féminin selon le prénom.
+        - Si le prénom évoque l'âge (comme 'Mamie', 'Papi'), adopte un ton d'une personne âgée.
+        Ne donne pas d'explication, écris seulement la phrase.
+        """
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        interpretation = response['choices'][0]['message']['content'].strip()
+
+        historique.append(f"{nom_personne} → {', '.join(mots_tires)} → {interpretation}")
+        session['historique_anselme'] = historique
+
+    return render_template('index6.html', nom_personne=nom_personne, mots_tires=', '.join(mots_tires), interpretation=interpretation, historique=historique)
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 
