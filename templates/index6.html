@@ -101,13 +101,13 @@
         <div class="intro">Écris le nom d’un défunt ami ou célèbre et il t’offrira 3 mots.</div>
 
         <form method="post">
-            <input type="text" name="nom_personne" placeholder="Nom de l’entité...">
+            <input type="text" name="nom_personne" placeholder="Nom de l’entité..." value="{{ nom_personne }}">
             <br>
             <button type="submit">✨ Interroger</button>
             <button type="button" onclick="document.querySelector('input[name=nom_personne]').value=''">🔄 Autre entité</button>
         </form>
 
-        {% if resultats %}
+        {% if mots_tires and interpretation %}
             <div class="réponse">
                 {{ nom_personne }} t’envoie... {{ mots_tires }}<br><br>
                 Anselme comprend... {{ interpretation }}
@@ -120,7 +120,7 @@
             <h4>Historique des tirages :</h4>
             <ul>
                 {% for item in historique %}
-                    <li>{{ item }}</li>
+                    <li>{{ item|safe }}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -131,4 +131,3 @@
     </div>
 </body>
 </html>
-
