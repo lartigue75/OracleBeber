@@ -297,6 +297,7 @@ def anselme():
         - Si c'est une personne inconnue, joue simplement sur le ton masculin ou féminin selon le prénom.
         - Si le prénom évoque l'âge (comme 'Mamie', 'Papi'), adopte un ton d'une personne âgée.
         Ne donne pas d'explication, écris seulement la phrase.
+        Tu ne fais que traduire ce que veut dire {nom_personne} et ne délivre pas de message divinatoire.
         """
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
