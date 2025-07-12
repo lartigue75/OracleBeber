@@ -283,8 +283,8 @@ def generer_trois_mots():
 def anselme():
     interpretation = ""
     mots_tires = []
-    historique = []
     nom_personne = ""
+    historique = session.get('historique_anselme', [])
     
     if request.method == 'POST':
         nom_personne = request.form['nom_personne'] or "l'Inconnu"
@@ -304,7 +304,7 @@ def anselme():
         )
         interpretation = response['choices'][0]['message']['content'].strip()
 
-        historique.append(f"{nom_personne} → {', '.join(mots_tires)} → {interpretation}")
+        historique.append(f"{nom_personne} t’envoie... {', '.join(mots_tires)}<br>Anselme comprend... {interpretation}")
         session['historique_anselme'] = historique
 
     return render_template('index6.html', nom_personne=nom_personne, mots_tires=', '.join(mots_tires), interpretation=interpretation, historique=historique)
