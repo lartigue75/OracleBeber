@@ -56,12 +56,6 @@
             color: #5a5a5a;
             margin-bottom: 15px;
         }
-        .explication {
-            font-size: 14px;
-            color: #7a7a7a;
-            margin: 10px auto 20px auto;
-            max-width: 600px;
-        }
         .réponse {
             font-weight: bold;
             font-size: 20px;
@@ -103,12 +97,8 @@
 
     <h2>Anselme, le médium connecté à l'autre côté du miroir</h2>
 
-    <div class="explication">
-        <p><em>Comment ça marche ? Des lettres sont tirées aléatoirement jusqu'à former trois mots existants. Puis, l'intelligence artificielle compose une phrase imagée à partir de ces trois mots. Tu peux avoir ta propre interprétation.</em></p>
-    </div>
-
     <div class="boite">
-        <div class="intro">Écris le nom d’un défunt, ami ou célèbre et pense à lui. Il t’offrira 3 mots.</div>
+        <div class="intro">Écris le nom d’un défunt, ami ou célèbre. Pense fort à lui et il t’offrira 3 mots.</div>
 
         <form method="post">
             <input type="text" name="nom_personne" placeholder="Nom de l’entité..." value="{{ nom_personne }}">
@@ -142,6 +132,11 @@
     <div class="retour">
         <a href="/" class="back-button">🔮 Changer d'oracle</a>
     </div>
+
+    <br>
+    <div class="visites">
+        Nombre de consultations : {{ visites }}
+    </div>
+
 </body>
 </html>
-
