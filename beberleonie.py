@@ -9,6 +9,30 @@ app.secret_key = 'béber-et-léonie'
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+# Fonctions utilitaires pour les compteurs
+def lire_compteur(filename):
+    try:
+        with open(filename, 'r') as f:
+            return int(f.read())
+    except:
+        return 0
+
+def increment_compteur(filename):
+    count = lire_compteur(filename)
+    count += 1
+    with open(filename, 'w') as f:
+        f.write(str(count))
+    return count
+
+def total_visites():
+    return (
+        lire_compteur('compteur_beber.txt') +
+        lire_compteur('compteur_leonie.txt') +
+        lire_compteur('compteur_morgane.txt') +
+        lire_compteur('compteur_math.txt') +
+        lire_compteur('compteur_anselme.txt')
+    )
+
 # Tonalités communes
 TONALITES = [
     "positive", "positive", "positive",
@@ -44,32 +68,10 @@ valeurs_arcanes = {
 
 arcanes = list(valeurs_arcanes.keys())
 
-def get_visite_count():
-    compteur_path = "compteur.txt"
-
-    # Si le fichier n’existe pas, on le crée à 0
-    if not os.path.exists(compteur_path):
-        with open(compteur_path, "w") as f:
-            f.write("0")
-
-    # Lire le compteur
-    with open(compteur_path, "r+") as f:
-        count = int(f.read().strip() or "0")  # Sécurité : si vide
-
-        # Incrémenter
-        count += 1
-
-        # Réécrire
-        f.seek(0)
-        f.write(str(count))
-        f.truncate()
-
-    return count
-
 # ROUTE D'ACCUEIL avec compteur interne
 @app.route('/')
 def accueil():
-    count = get_visite_count()
+    count = total_visites()
     return render_template("accueil.html", visites=count)
 
 # ORACLE BÉBER
@@ -83,6 +85,7 @@ STYLES_PERSONNAGES = [
 
 @app.route('/beber', methods=['GET', 'POST'])
 def beber():
+    count_beber = increment_compteur('compteur_beber.txt')
     if request.method == 'POST':
         question = request.form.get("question", "").strip()
         if question:
@@ -127,11 +130,12 @@ def beber():
 
     answer = session.pop('answer', None)
     intro = session.pop('intro', None)
-    return render_template('index.html', answer=answer, intro=intro)
+    return render_template('index.html', answer=answer, intro=intro, visites=count_beber)
 
 # ORACLE MORGANE D'AVALON
 @app.route('/morgane', methods=['GET', 'POST'])
 def morgane():
+    count_morgane = increment_compteur('compteur_morgane.txt')
     if request.method == 'POST':
         question = request.form.get("question", "").strip()
 
@@ -148,7 +152,7 @@ def morgane():
 
     answer = session.pop('answer', None)
     intro = session.pop('intro', None)
-    return render_template('index3.html', answer=answer, intro=intro)
+    return render_template('index3.html', answer=answer, intro=intro, visites=count_morgane)
 
 def get_morgane_answer(question, tonalite):
     # Vérifier le nombre de questions
@@ -190,6 +194,7 @@ def get_morgane_answer(question, tonalite):
 # ORACLE LÉONIE
 @app.route('/leonie', methods=['GET', 'POST'])
 def leonie():
+    count_leonie = increment_compteur('compteur_leonie.txt')
     if request.method == 'POST':
         choix1 = request.form.get("choix1", "").strip()
         choix2 = request.form.get("choix2", "").strip()
@@ -209,12 +214,13 @@ def leonie():
 
     answer = session.pop('answer', None)
     intro = session.pop('intro', None)
-    return render_template('index2.html', answer=answer, intro=intro)
+    return render_template('index2.html', answer=answer, intro=intro, visites=count_leonie)
 
 #Oracle MATHS
 @app.route("/math")
 def math():
-    return render_template("index4.html")
+    count_math = increment_compteur('compteur_math.txt')
+    return render_template('index4.html', visites=count_math)
 
 def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     prompt = f"""
@@ -281,6 +287,7 @@ def generer_trois_mots():
 # Route pour Anselme
 @app.route('/anselme', methods=['GET', 'POST'])
 def anselme():
+    count_anselme = increment_compteur('compteur_anselme.txt')
     interpretation = ""
     mots_tires = []
     nom_personne = ""
@@ -296,8 +303,7 @@ def anselme():
         - Si c'est une célébrité connue, inspire-toi légèrement de son style ou de ses idées.
         - Si c'est une personne inconnue, joue simplement sur le ton masculin ou féminin selon le prénom.
         - Si le prénom évoque l'âge (comme 'Mamie', 'Papi'), adopte un ton d'une personne âgée.
-        Ne donne pas d'explication, écris seulement la phrase.
-        Tu ne fais que traduire ce que veut dire {nom_personne} et ne délivre pas de message divinatoire.
+        Ne donne pas d'explication, écris seulement la phrase. Tu ne fais que traduire ce que veut dire {nom_personne} et ne délivre pas de message divinatoire.
         """
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -308,16 +314,14 @@ def anselme():
         historique.append(f"{nom_personne} t’envoie... {', '.join(mots_tires)}<br>Anselme comprend... {interpretation}")
         session['historique_anselme'] = historique
 
-    return render_template('index6.html', nom_personne=nom_personne, mots_tires=', '.join(mots_tires), interpretation=interpretation, historique=historique)
+    return render_template('index6.html', nom_personne=nom_personne, mots_tires=', '.join(mots_tires), interpretation=interpretation, historique=historique, visites=count_anselme)
 
 @app.route('/anselme/clear', methods=['POST'])
 def clear_anselme():
     session['historique_anselme'] = []
     return redirect(url_for('anselme'))
 
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
-
-
