@@ -3,6 +3,7 @@ import os
 import string
 import openai
 import random
+import ahocorasick
 
 app = Flask(__name__)
 app.secret_key = 'béber-et-léonie'
@@ -265,24 +266,44 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
 # Charger le dictionnaire français
 def charger_dictionnaire():
     with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
-        return set(m.strip().lower() for m in f if len(m.strip()) >= 5)
+        return set(m.strip().lower() for m in f if len(m.strip()) >= 6)
 
 mots_fr = charger_dictionnaire()
 
-# Fonction pour générer trois mots aléatoires
+# Charger le dictionnaire français et construire l'automate
+def charger_automate():
+    automaton = ahocorasick.Automaton()
+    with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
+        for idx, mot in enumerate(f):
+            mot_clean = mot.strip().lower()
+            if len(mot_clean) >= 6:
+                automaton.add_word(mot_clean, (idx, mot_clean))
+    automaton.make_automaton()
+    return automaton
+
+automate_fr = charger_automate()
+
 def generer_trois_mots():
     sequence = ""
-    mots_trouves = []
+    bloc_length = 100         # on génère plus de lettres à la fois
+    longueur_fenetre = 1000   # plus grande fenêtre pour maximiser les chances
+    mots_trouves = set()
+
     while len(mots_trouves) < 3:
-        bloc = ''.join(random.choice(string.ascii_lowercase) for _ in range(20))
+        bloc = ''.join(random.choice(string.ascii_lowercase) for _ in range(bloc_length))
         sequence += bloc
-        if len(sequence) > 1000:
-            sequence = sequence[-1000:]
-        fenetre = sequence[-100:]
-        mot_trouve = next((m for m in mots_fr if m in fenetre), None)
-        if mot_trouve and mot_trouve not in mots_trouves:
-            mots_trouves.append(mot_trouve)
-    return mots_trouves
+        if len(sequence) > 5000:
+            sequence = sequence[-5000:]
+
+        fenetre = sequence[-longueur_fenetre:]
+
+        for end_idx, (idx, mot) in automate_fr.iter(fenetre):
+            if mot not in mots_trouves:
+                mots_trouves.add(mot)
+                if len(mots_trouves) >= 3:
+                    break
+
+    return list(mots_trouves)
 
 # Route pour Anselme
 @app.route('/anselme', methods=['GET', 'POST'])
