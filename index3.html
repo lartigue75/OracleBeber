@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Morgane d'Avalon, magicienne et guérisseuse, soeur du Roi Arthur</title>
+    <style>
+        body {
+            background-color: #fdfcf9; /* blanc très légerement cassé */
+            font-family: 'Georgia', serif;
+            text-align: center;
+            padding-top: 50px;
+            color: #2b2b2b;
+        }
+        img {
+            max-width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .boite {
+            background-color: transparent;
+            display: inline-block;
+            padding: 25px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #5c3b27; /* marron foncé */
+            color: white;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .intro {
+            font-style: italic;
+            font-size: 18px;
+            color: #5a5a5a;
+            margin-bottom: 15px;
+        }
+        .réponse {
+            font-weight: bold;
+            font-size: 20px;
+            color: #6b3e99;
+            margin-top: 20px;
+        }
+        .retour {
+            margin-top: 30px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ff6a00, #ffb347);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .back-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <img src="{{ url_for('static', filename='Morgane2.jpeg') }}" alt="Morgane">
+
+    <h2>Morgane d'Avalon, magicienne et guérisseuse, soeur du Roi Arthur</h2>
+
+    <div class="boite">
+        {% if intro %}
+            <div class="intro">{{ intro }}</div>
+        {% endif %}
+
+        <form method="post">
+            <p>Pose ta question. De dimensions lointaines, Morgane y répondra.</p>
+            <input type="text" name="question" placeholder="Pose ta question ici...">
+            <br>
+            <button type="submit">✨ Obtenir une réponse</button>
+        </form>
+
+        {% if answer %}
+            <div class="réponse">{{ answer }}</div>
+        {% endif %}
+    </div>
+
+    <br>
+    <div class="visites">
+        Nombre de consultations : {{ visites }}
+    </div>
+
+    <div class="retour">
+        <a href="/" class="back-button">🔮 Changer d'oracle</a>
+    </div>
+</body>
+</html>
