@@ -85,9 +85,10 @@ STYLES_PERSONNAGES = [
 ]
 
 @app.route('/beber', methods=['GET', 'POST'])
-def beber():
-    count_beber = increment_compteur('compteur_beber.txt')
+def beber():  
+    count_beber = lire_compteur('compteur_beber.txt')
     if request.method == 'POST':
+        count_beber = increment_compteur('compteur_beber.txt')
         question = request.form.get("question", "").strip()
         if question:
             style = random.choice(STYLES_PERSONNAGES)
@@ -136,8 +137,9 @@ def beber():
 # ORACLE MORGANE D'AVALON
 @app.route('/morgane', methods=['GET', 'POST'])
 def morgane():
-    count_morgane = increment_compteur('compteur_morgane.txt')
+    count_morgane = lire_compteur('compteur_morgane.txt')
     if request.method == 'POST':
+        count_morgane = increment_compteur('compteur_morgane.txt')
         question = request.form.get("question", "").strip()
 
         if question:
@@ -195,8 +197,9 @@ def get_morgane_answer(question, tonalite):
 # ORACLE LÉONIE
 @app.route('/leonie', methods=['GET', 'POST'])
 def leonie():
-    count_leonie = increment_compteur('compteur_leonie.txt')
+    count_leonie = lire_compteur('compteur_leonie.txt')    
     if request.method == 'POST':
+        count_leonie = increment_compteur('compteur_leonie.txt')
         choix1 = request.form.get("choix1", "").strip()
         choix2 = request.form.get("choix2", "").strip()
 
@@ -308,13 +311,14 @@ def generer_trois_mots():
 # Route pour Anselme
 @app.route('/anselme', methods=['GET', 'POST'])
 def anselme():
-    count_anselme = increment_compteur('compteur_anselme.txt')
+    count_anselme = lire_compteur('compteur_anselme.txt')    
     interpretation = ""
     mots_tires = []
     nom_personne = ""
     historique = session.get('historique_anselme', [])
     
     if request.method == 'POST':
+        count_anselme = increment_compteur('compteur_anselme.txt')
         nom_personne = request.form['nom_personne'] or "l'Inconnu"
         mots_tires = generer_trois_mots()
         prompt = f"""
