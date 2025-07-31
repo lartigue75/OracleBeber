@@ -266,12 +266,9 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
     except Exception as e:
         return "Léonie ne parvient pas à lire clairement les signes cette fois."
 
-# Charger le dictionnaire français
 def charger_dictionnaire():
     with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
-        return set(m.strip().lower() for m in f if len(m.strip()) >= 6)
-
-mots_fr = charger_dictionnaire()
+        return set(m.strip().lower() for m in f if len(m.strip()) == 6 and m.strip().isalpha())
 
 # Charger le dictionnaire français et construire l'automate
 def charger_automate():
@@ -279,20 +276,17 @@ def charger_automate():
     with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
         for idx, mot in enumerate(f):
             mot_clean = mot.strip().lower()
-            if len(mot_clean) >= 6:
+            if len(mot_clean) == 6 and mot_clean.isalpha():
                 automaton.add_word(mot_clean, (idx, mot_clean))
     automaton.make_automaton()
     return automaton
 
-automate_fr = charger_automate()
-
-def generer_trois_mots():
+def generer_un_mot():
     sequence = ""
-    bloc_length = 100         # on génère plus de lettres à la fois
-    longueur_fenetre = 1000   # plus grande fenêtre pour maximiser les chances
-    mots_trouves = set()
+    bloc_length = 100
+    longueur_fenetre = 1000
 
-    while len(mots_trouves) < 3:
+    while True:
         bloc = ''.join(random.choice(string.ascii_lowercase) for _ in range(bloc_length))
         sequence += bloc
         if len(sequence) > 5000:
@@ -301,45 +295,31 @@ def generer_trois_mots():
         fenetre = sequence[-longueur_fenetre:]
 
         for end_idx, (idx, mot) in automate_fr.iter(fenetre):
-            if mot not in mots_trouves:
-                mots_trouves.add(mot)
-                if len(mots_trouves) >= 3:
-                    break
-
-    return list(mots_trouves)
+            return mot
 
 # Route pour Anselme
 @app.route('/anselme', methods=['GET', 'POST'])
 def anselme():
     count_anselme = lire_compteur('compteur_anselme.txt')    
-    interpretation = ""
-    mots_tires = []
+    mot_tire = ""
     nom_personne = ""
     historique = session.get('historique_anselme', [])
-    
+
     if request.method == 'POST':
         count_anselme = increment_compteur('compteur_anselme.txt')
         nom_personne = request.form['nom_personne'] or "l'Inconnu"
-        mots_tires = generer_trois_mots()
-        prompt = f"""
-        Tu es un médium. Trois mots ont été tirés au hasard pour {nom_personne} : {', '.join(mots_tires)}.
-        Compose une phrase courte et imagée qui relie ces trois mots.
-        Adapte le ton selon la personnalité du locuteur :
-        - Si c'est une célébrité connue, inspire-toi légèrement de son style ou de ses idées.
-        - Si c'est une personne inconnue, joue simplement sur le ton masculin ou féminin selon le prénom.
-        - Si le prénom évoque l'âge (comme 'Mamie', 'Papi'), adopte un ton d'une personne âgée.
-        Ne donne pas d'explication, écris seulement la phrase. Tu ne fais que traduire ce que veut dire {nom_personne} et ne délivre pas de message divinatoire.
-        """
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        interpretation = response['choices'][0]['message']['content'].strip()
+        mot_tire = generer_un_mot()
 
-        historique.append(f"{nom_personne} t’envoie... {', '.join(mots_tires)}<br>Anselme comprend... {interpretation}")
+        historique.append(f"{nom_personne} t’envoie... <strong>{mot_tire}</strong>")
         session['historique_anselme'] = historique
 
-    return render_template('index6.html', nom_personne=nom_personne, mots_tires=', '.join(mots_tires), interpretation=interpretation, historique=historique, visites=count_anselme)
+    return render_template('index6.html',
+        nom_personne=nom_personne,
+        mots_tires=mot_tire,
+        interpretation=None,
+        historique=historique,
+        visites=count_anselme
+    )
 
 @app.route('/anselme/clear', methods=['POST'])
 def clear_anselme():
@@ -350,3 +330,4 @@ def clear_anselme():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
