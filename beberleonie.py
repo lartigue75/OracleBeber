@@ -281,6 +281,9 @@ def charger_automate():
     automaton.make_automaton()
     return automaton
 
+# ✅ CHARGEMENT ICI (obligatoire pour que la variable automate_fr existe)
+automate_fr = charger_automate()
+
 def generer_un_mot():
     sequence = ""
     bloc_length = 100
