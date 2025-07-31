@@ -62,6 +62,26 @@
             color: #6b3e99;
             margin-top: 20px;
         }
+        .lettres-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .case-lettre {
+            width: 60px;
+            height: 60px;
+            background-color: #ffffff;
+            border: 2px solid #6b3e99;
+            border-radius: 10px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #6b3e99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(107, 62, 153, 0.2);
+        }
         .historique {
             font-size: 14px;
             color: #7a7a7a;
@@ -98,7 +118,7 @@
     <h2>Anselme, le médium connecté à l'autre côté du miroir</h2>
 
     <div class="boite">
-        <div class="intro">Écris le nom d’un défunt, ami ou célèbre. Pense fort à lui et il t’offrira 3 mots.</div>
+        <div class="intro">Écris le nom d’un défunt, ami ou célèbre. Pense fort à lui et il t’offrira un mot.</div>
 
         <form method="post">
             <input type="text" name="nom_personne" placeholder="Nom de l’entité..." value="{{ nom_personne }}">
@@ -107,11 +127,52 @@
             <button type="button" onclick="document.querySelector('input[name=nom_personne]').value=''">🔄 Autre entité</button>
         </form>
 
-        {% if mots_tires and interpretation %}
+        {% if mots_tires %}
             <div class="réponse">
-                {{ nom_personne }} t’envoie... {{ mots_tires }}<br><br>
-                Anselme comprend... {{ interpretation }}
+                {{ nom_personne }} t’envoie...
+                <div id="lettres" class="lettres-container">
+                    {% for i in range(6) %}
+                        <div class="case-lettre" id="case{{ i }}">?</div>
+                    {% endfor %}
+                </div>
             </div>
+
+            <script>
+                const lettresFinales = "{{ mots_tires|upper }}".split('');
+                const couleurs = ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ff924c"];
+                let intervalId;
+
+                function defilement() {
+                    intervalId = setInterval(() => {
+                        for (let i = 0; i < 6; i++) {
+                            const lettre = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                            document.getElementById("case" + i).textContent = lettre;
+                        }
+                    }, 80);
+                }
+
+                function revelerMot() {
+                    clearInterval(intervalId);
+                    for (let i = 0; i < 6; i++) {
+                        const caseDiv = document.getElementById("case" + i);
+                        caseDiv.style.transition = "background-color 0.15s";
+                        caseDiv.style.backgroundColor = couleurs[i];
+                    }
+
+                    setTimeout(() => {
+                        for (let i = 0; i < 6; i++) {
+                            const caseDiv = document.getElementById("case" + i);
+                            caseDiv.textContent = lettresFinales[i];
+                            caseDiv.style.backgroundColor = "#ffffff";
+                        }
+                    }, 1000);
+                }
+
+                window.onload = function() {
+                    defilement();
+                    setTimeout(revelerMot, 2000);
+                };
+            </script>
         {% endif %}
     </div>
 
@@ -137,6 +198,6 @@
     <div class="visites">
         Nombre de consultations : {{ visites }}
     </div>
-
 </body>
 </html>
+
