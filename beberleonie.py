@@ -284,7 +284,10 @@ def charger_automate():
 # ✅ CHARGEMENT ICI (obligatoire pour que la variable automate_fr existe)
 automate_fr = charger_automate()
 
-def generer_un_mot():
+def generer_un_mot(automate_5, automate_6):
+    longueur = random.choices([5, 6], weights=[2, 3])[0]
+    automate = automate_5 if longueur == 5 else automate_6
+
     sequence = ""
     bloc_length = 100
     longueur_fenetre = 1000
@@ -294,10 +297,9 @@ def generer_un_mot():
         sequence += bloc
         if len(sequence) > 5000:
             sequence = sequence[-5000:]
-
         fenetre = sequence[-longueur_fenetre:]
 
-        for end_idx, (idx, mot) in automate_fr.iter(fenetre):
+        for end_idx, (idx, mot) in automate.iter(fenetre):
             return mot
 
 # Route pour Anselme
