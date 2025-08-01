@@ -288,9 +288,6 @@ def charger_automate(longueur):
 automate_5 = charger_automate(5)
 automate_6 = charger_automate(6)
 
-# ✅ CHARGEMENT ICI (obligatoire pour que la variable automate_fr existe)
-automate_fr = charger_automate()
-
 def generer_un_mot(automate_5, automate_6):
     longueur = random.choices([5, 6], weights=[2, 3])[0]
     automate = automate_5 if longueur == 5 else automate_6
