@@ -271,15 +271,22 @@ def charger_dictionnaire():
         return set(m.strip().lower() for m in f if len(m.strip()) == 6 and m.strip().isalpha())
 
 # Charger le dictionnaire français et construire l'automate
-def charger_automate():
+automate_5 = ahocorasick.Automaton()
+automate_6 = ahocorasick.Automaton()
+
+def charger_automate(longueur):
     automaton = ahocorasick.Automaton()
     with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
         for idx, mot in enumerate(f):
             mot_clean = mot.strip().lower()
-            if len(mot_clean) == 6 and mot_clean.isalpha():
+            if len(mot_clean) == longueur and mot_clean.isalpha():
                 automaton.add_word(mot_clean, (idx, mot_clean))
     automaton.make_automaton()
     return automaton
+
+# Chargement des deux automates
+automate_5 = charger_automate(5)
+automate_6 = charger_automate(6)
 
 # ✅ CHARGEMENT ICI (obligatoire pour que la variable automate_fr existe)
 automate_fr = charger_automate()
@@ -313,7 +320,7 @@ def anselme():
     if request.method == 'POST':
         count_anselme = increment_compteur('compteur_anselme.txt')
         nom_personne = request.form['nom_personne'] or "l'Inconnu"
-        mot_tire = generer_un_mot()
+        mot_tire = generer_un_mot(automate_5, automate_6)
 
         historique.append(f"{nom_personne} t’envoie... <strong>{mot_tire}</strong>")
         session['historique_anselme'] = historique
@@ -335,4 +342,5 @@ def clear_anselme():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
