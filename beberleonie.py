@@ -114,7 +114,7 @@ def beber():
 
             try:
                 response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
+                    model="gpt-4.1-mini",
                     messages=[
                         {"role": "system", "content": "Tu es un oracle incarné par un personnage fantasque ou mystique. Tu réponds brièvement et avec un ton tranché."},
                         {"role": "user", "content": prompt.strip()}
@@ -182,7 +182,7 @@ def get_morgane_answer(question, tonalite):
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1-mini",
             messages=[
                 {"role": "system", "content": "Tu es Morgane d’Avalon, magicienne et sœur du roi Arthur. Ton style est posé, grave, légèrement énigmatique. Tu ne parles jamais plus que nécessaire."},
                 {"role": "user", "content": prompt.strip()}
@@ -254,7 +254,7 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
 
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4.1-mini",
             messages=[
                 {"role": "system", "content": "Tu es Léonie, voyante spécialisée dans le tirage entre deux choix. Ton ton est espiègle, décalé, jamais fade."},
                 {"role": "user", "content": prompt.strip()}
