@@ -126,7 +126,7 @@ def beber():
                 session['answer'] = texte
                 session['intro'] = intro
             except Exception as e:
-                session['answer'] = "Béber s’est emmêlé les neurones (erreur OpenAI)."
+                session['answer'] = f"Erreur Béber : {type(e).__name__} - {str(e)}"
                 session['intro'] = ""
         return redirect(url_for('beber'))
 
@@ -192,7 +192,7 @@ def get_morgane_answer(question, tonalite):
         )
         return response.choices[0].message['content'].strip()
     except Exception as e:
-        return "Morgane ne parvient pas à capter les flux du destin en cet instant."
+        return f"Erreur Morgane : {type(e).__name__} - {str(e)}"
 
 # ORACLE LÉONIE
 @app.route('/leonie', methods=['GET', 'POST'])
@@ -264,7 +264,7 @@ def get_leonie_duel_answer(choix1, choix2, arcane1, arcane2):
         )
         return response.choices[0].message['content'].strip()
     except Exception as e:
-        return "Léonie ne parvient pas à lire clairement les signes cette fois."
+        return f"Erreur Léonie : {type(e).__name__} - {str(e)}"
 
 def charger_dictionnaire():
     with open('french_dictionary.txt', 'r', encoding='utf-8') as f:
